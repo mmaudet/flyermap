@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2025-02-05)
 ## Current Position
 
 Phase: 4 of 4 (Assignment System)
-Plan: 1 of 3 complete
+Plan: 2 of 3 complete
 Status: In progress
-Last activity: 2026-02-05 — Completed 04-01-PLAN.md (Zone editor dialog)
+Last activity: 2026-02-05 — Completed 04-02-PLAN.md (Dynamic zone styling)
 
-Progress: [████████░░] 82%
+Progress: [█████████░] 91%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 8
-- Average duration: 2.3 min
-- Total execution time: 0.28 hours
+- Total plans completed: 9
+- Average duration: 2.2 min
+- Total execution time: 0.32 hours
 
 **By Phase:**
 
@@ -30,10 +30,10 @@ Progress: [████████░░] 82%
 | 01-foundation | 1/1 | 3.8 min | 3.8 min |
 | 02-team-management | 3/3 | 5.1 min | 1.7 min |
 | 03-zone-creation | 3/3 | 7.2 min | 2.4 min |
-| 04-assignment-system | 1/3 | 2.9 min | 2.9 min |
+| 04-assignment-system | 2/3 | 4.9 min | 2.5 min |
 
 **Recent Trend:**
-- Last 5 plans: 2.3m, 2.0m, 2.9m, 2.9m, 2.9m
+- Last 5 plans: 2.0m, 2.9m, 2.9m, 2.9m, 2.0m
 - Trend: Consistent execution speed around 2-3 minutes per plan
 
 *Updated after each plan completion*
@@ -78,7 +78,10 @@ Recent decisions affecting current work:
 | FormData API for form collection | 04-01 | Standard browser API for form data extraction | Simple form handling without manual DOM traversal |
 | L.DomEvent.stopPropagation on zone clicks | 04-01 | Prevent map events from interfering with dialog opening | Zone clicks don't trigger Geoman edit mode |
 | Store team member IDs in assignedMembers | 04-01 | Normalized data - team details stored once | Easy to update member info without touching zones |
-| Bind click events to both restored and new zones | 04-01 | Comprehensive editor access for all zones | Click-to-edit works consistently
+| Bind click events to both restored and new zones | 04-01 | Comprehensive editor access for all zones | Click-to-edit works consistently |
+| Use first member's color for multi-assignment zones | 04-02 | Simple, predictable visual rule | Zone color indicates primary/first assignee |
+| Explicit updateZoneStyle after save | 04-02 | Guarantees instant visual feedback with no race conditions | Dual update path (explicit + subscription) ensures UX consistency |
+| Assigned zones use higher opacity (0.3 vs 0.2) | 04-02 | Subtle visual distinction | Assigned zones slightly more prominent than unassigned
 
 ### Pending Todos
 
@@ -90,8 +93,8 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-05 05:36 UTC
-Stopped at: Completed 04-01-PLAN.md (Zone editor dialog)
+Last session: 2026-02-05 05:41 UTC
+Stopped at: Completed 04-02-PLAN.md (Dynamic zone styling)
 Resume file: None
 
 ---
