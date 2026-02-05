@@ -1,309 +1,309 @@
-# Feature Landscape
+# Features Research: v1.1 Wizard Onboarding + Zone Export
 
-**Domain:** Interactive zone management mapping for political campaigns
-**Researched:** 2026-02-05
-**Confidence:** MEDIUM (verified with multiple web sources, domain-specific examples available)
+**Domain:** Territory mapping app for political campaign flyer distribution
+**Research Date:** 2026-02-05
+**Focus:** NEW features for v1.1 (wizard onboarding + zone export)
+**Confidence:** MEDIUM (WebSearch verified with domain patterns)
 
-## Executive Summary
+## Summary
 
-Interactive zone management mapping applications sit at the intersection of web mapping, territory management, and campaign coordination. Research reveals three distinct feature tiers:
-1. **Table stakes**: Core mapping interactions without which the application feels broken
-2. **Differentiators**: Features that transform a map viewer into a campaign management tool
-3. **Anti-features**: Over-engineered capabilities that add complexity without value for single-user scenarios
+This research examines expected UX patterns for two feature categories being added to FlyerMap v1.1:
 
-For a campaign coordinator managing team member distribution zones in a French commune, the feature set should prioritize immediate usability over enterprise complexity.
+1. **Wizard Onboarding** - First-launch experience to configure commune location and import team data
+2. **Zone Export** - Print/digital distribution of zone assignments with street lists
 
-## Table Stakes
+Research synthesizes patterns from:
+- Onboarding wizard best practices (SaaS/productivity apps)
+- Territory mapping software (field service, sales, canvassing)
+- Political campaign tools (door-to-door canvassing, walk sheets)
+- Address/location picker patterns
+- CSV import/validation workflows
 
-Features users expect. Missing = product feels incomplete or broken.
+**Key finding:** Users expect wizards to be 3-5 steps max with clear progress indicators, and zone exports to include both printable maps AND structured data (street lists, assignments).
 
-| Feature | Why Expected | Complexity | Dependencies | Notes |
-|---------|--------------|------------|--------------|-------|
-| **Interactive basemap display** | Users cannot orient themselves without a recognizable map | Low | Map library (Leaflet/OpenLayers) + tile provider | French commune requires French-specific tile source (IGN, OSM France) |
-| **Zoom and pan controls** | Essential navigation for any web map | Low | Built into map libraries | Both mouse/touch and +/- buttons expected |
-| **Marker display** | Team member locations must be visible on map | Low | Map library markers API | Need to distinguish between assigned/unassigned |
-| **Polygon drawing** | Core requirement for defining zones | Medium | Drawing library/plugin | Click-to-add-vertex, double-click-to-close pattern is standard |
-| **Polygon editing** | Users make mistakes and need corrections | Medium | Drawing library edit mode | Drag vertices, add/remove points, delete entire polygon |
-| **Save work** | Losing work destroys trust in the tool | Medium | Storage mechanism (localStorage, file download, or backend) | Single user suggests localStorage + file export sufficient |
-| **Load work** | Cannot continue work without loading saved state | Medium | Same as Save | Must handle both localStorage restore and file import |
-| **Visual zone boundaries** | Users must see what they drew | Low | Polygon rendering with stroke/fill | Colors distinguish zones; labels identify them |
-| **Marker-to-zone assignment** | Core business logic: which team member covers which zone | Medium | Geospatial calculation (point-in-polygon) | Basis for proximity assignment |
+---
 
-### Rationale
+## Wizard Onboarding
 
-These features define the minimum viable product. Without interactive navigation, users cannot explore the commune. Without drawing and editing, users cannot create zones. Without save/load, the tool is a toy. Without assignment logic, it doesn't solve the core problem.
+### Table Stakes
 
-**Sources:** Based on analysis of territory mapping software patterns ([Maptive](https://www.maptive.com/15-best-sales-territory-mapping-software/), [Knockbase](https://www.knockbase.com/features/territory-mapping-software)), web mapping essentials ([FME Web Mapping 101](https://fme.safe.com/blog/2025/11/web-mapping-101-how-to-create-dynamic-web-maps/)), and Leaflet/OpenLayers core feature sets ([Geoapify comparison](https://www.geoapify.com/leaflet-vs-openlayers/)).
+Features users expect for first-launch setup. Missing these = app feels incomplete.
 
-## Differentiators
+| Feature | Why Essential | Complexity |
+|---------|---------------|------------|
+| **Welcome screen with action prompt** | 90% of onboarding sequences start with welcome message. Sets expectations and tone. Users need clear entry point. | Low |
+| **Progress indicator (stepper)** | Shows where user is (current step) and what remains. Reduces anxiety, increases completion rates. | Low |
+| **Step validation before advance** | Prevents users from proceeding with invalid data. Catches errors early. Standard pattern for multi-step forms. | Medium |
+| **Clear "Next" and "Back" navigation** | Users expect bidirectional flow in wizards. Back button lets them fix mistakes without starting over. | Low |
+| **Auto-detection/suggestion where possible** | Postal code → commune lookup expected. Manual entry feels tedious. Territory apps emphasize "quick data import" and "rapid time-to-value". | Medium |
+| **Skip/Cancel option visible** | Users need escape hatch. Reduces perceived commitment. Standard accessibility pattern. | Low |
+| **Success confirmation at end** | Wizard ends with result summary. Reinforces trust, provides satisfying closure. | Low |
 
-Features that set this product apart. Not expected, but valuable for the campaign use case.
+### Differentiators
 
-| Feature | Value Proposition | Complexity | Dependencies | Notes |
-|---------|-------------------|------------|--------------|-------|
-| **Auto-assignment by proximity** | Automates tedious manual work: assign team members to nearest zone | Medium | Distance calculation (haversine or planar), algorithm to find nearest zone | Major time-saver for coordinator |
-| **Zone metadata** | Rich information beyond geometry: zone name, priority, notes, assignment status | Low | Data model extension | Enables better organization and planning |
-| **Visual assignment status** | Color-coding shows at-a-glance which zones are covered vs unassigned | Low | Conditional rendering based on zone state | Reduces cognitive load |
-| **Export to shareable format** | Generate GeoJSON or KML for sharing with external tools | Low | JSON serialization | Interoperability with other campaign tools |
-| **Import existing data** | Load address lists or existing territory data | Medium | CSV/JSON parsing, geocoding (if addresses) | Kickstarts setup instead of manual entry |
-| **Undo/Redo** | Recover from mistakes without full reload | Medium | State history management | Significantly improves UX confidence |
-| **Search/filter markers** | Find specific team member by name or attributes | Low | Text matching on marker metadata | Useful as team size grows beyond ~10 |
-| **Zone statistics** | Show area, perimeter, number of assigned members | Medium | Geometric calculations | Helps balance zone sizes |
-| **Mobile-friendly interface** | Coordinator can work from phone or tablet | Medium | Responsive design, touch interactions | Campaign work happens in the field |
-| **Offline capability** | Continue working when internet is spotty | High | Service worker, IndexedDB, sync logic | French communes may have connectivity gaps |
+Features that would make it better than basic implementation.
 
-### Rationale
+| Feature | Competitive Advantage | Complexity | Notes |
+|---------|----------------------|------------|-------|
+| **Postal code field with instant commune preview** | Territory mapping apps show "see results quickly". Reduce TtFV (time to first value) by showing map preview before CSV import. | Medium | Preview map boundary as soon as commune confirmed |
+| **CSV column auto-detection** | Bulk import UX best practice: auto-match CSV headers to expected fields. Reduce user friction. | Medium | Detect "adresse", "nom", "telephone" variants |
+| **Sample CSV download link** | Reduces support burden. Users can match format exactly. | Low | Provide example with French headers |
+| **"Use browser location" shortcut** | ZIP code auto-detection performs well in testing. Saves typing for users in target commune. | Low | Optional convenience feature |
+| **Drag-and-drop CSV upload** | Modern file upload pattern. Feels more polished than file picker only. | Low | Fallback to file picker for accessibility |
+| **Inline validation messages** | Errors flagged instantly in row/column where they occur. Standard for import UX. Increases confidence. | Medium | Show "3 addresses couldn't be geocoded" with list |
+| **Progress persistence across refreshes** | If wizard interrupted, resume at current step. Modern SaaS pattern (Airtable, etc.). | Medium | Use LocalStorage for wizard state |
 
-Auto-assignment by proximity is the killer feature—it transforms hours of manual work into seconds. Zone metadata and visual status differentiate a planning tool from a drawing tool. Export enables integration with the broader campaign ecosystem. Undo/redo is expected in modern apps but surprisingly rare in mapping tools.
+### Anti-Features
 
-Mobile-friendly and offline are marked as differentiators (not table stakes) because research shows most territory management tools are desktop-first, but campaign coordinators work in the field.
-
-**Sources:** Political campaign software patterns ([Maptive Political Campaigns](https://www.maptive.com/mapping-software-for-political-campaigns/), [Campaign Knock](https://campaignknock.com/), [Qomon](https://qomon.com/solutions/political-campaign)), territory management best practices ([KnockBase Territory Management](https://www.knockbase.com/blog/how-canvassing-software-simplifies-territory-management-for-sales-teams)), and canvassing software features ([Ecanvasser](https://www.ecanvasser.com/blog/political-canvassing-techniques)).
-
-## Anti-Features
-
-Features to explicitly NOT build. Common in enterprise territory management but wrong for this context.
+Things to deliberately NOT build for simplicity and scope control.
 
 | Anti-Feature | Why Avoid | What to Do Instead |
 |--------------|-----------|-------------------|
-| **Real-time multi-user collaboration** | Single user scenario; adds massive complexity (conflict resolution, presence, locking) | Simple save/load with file sharing if needed |
-| **Route optimization** | This is zone assignment, not turn-by-turn navigation | Focus on zone boundaries; let team members use their own navigation apps |
-| **AI-powered zone balancing** | Overkill for small team; coordinator knows context algorithms don't | Manual drawing with helpful visual feedback (e.g., zone area statistics) |
-| **Advanced GIS analysis** | Not a GIS platform; coordinator needs simple tools | Stick to point-in-polygon and distance calculations |
-| **User accounts and authentication** | Single user doesn't need to log in | Browser storage is sufficient |
-| **Historical version tracking** | Adds database complexity without clear value | Single "current" state with export for snapshots |
-| **Mobile app (native)** | Responsive web app sufficient; native app is 3x the work | Progressive Web App (PWA) if offline is needed |
-| **Integration with CRM/databases** | Small campaign likely has ad-hoc data, not structured systems | CSV import/export is enough |
-| **Automated territory rebalancing** | Assumes turnover and dynamic reassignment; campaign is more stable | Manual adjustment is fine |
-| **Complex permission system** | Single coordinator doesn't need role-based access | No permissions needed |
+| **Multi-page welcome tour with tooltips** | Best product tours = 3-5 tooltips max. More feels like hassle. App is simple enough to not need tour. | Single welcome screen, then straight to wizard |
+| **Account creation / authentication** | Violates RGPD-local-only constraint. Adds complexity. Not needed for single-user coordinator tool. | Keep LocalStorage-only approach |
+| **Commune search with autocomplete** | Postal code is simpler and unambiguous. Search adds complexity (multiple communes with same name). | Postal code → commune lookup only |
+| **Personalization / AI-driven flows** | Overkill for 4-step wizard with single use case. Current AI trend but not applicable here. | Fixed linear flow is cleaner |
+| **Save draft / partial setup** | Wizard should complete in 2-3 minutes. If user abandons, starting over is fine. | Focus on completion speed instead |
+| **Wizard as modal overlay** | Users need full screen for map preview and CSV upload. Modal feels cramped. | Dedicated wizard page, then redirect to main app |
+| **Animated transitions between steps** | Nice-to-have polish, but not table stakes. Can feel slow. | Instant step transitions are fine |
 
-### Rationale
+---
 
-The enterprise territory management research reveals heavy investment in multi-user, automation, and integration features. These make sense for sales teams with 50+ reps and high churn. For a single campaign coordinator managing a stable team of 5-15 volunteers in one commune, this complexity is waste.
+## Zone Export
 
-The temptation will be to build "room to grow," but growth that doesn't happen is technical debt. Start simple; features can be added if the tool succeeds and scope expands.
+### Table Stakes
 
-**Sources:** Analysis of enterprise features in territory management software ([Maptive Sales Territory](https://www.maptive.com/15-best-sales-territory-mapping-software/), [SalesMotion](https://salesmotion.io/blog/sales-territory-mapping-software), [SaaSCounter](https://www.saascounter.com/territory-management-software)) contrasted with campaign coordinator workflow and single-user project scope.
+Features users expect for zone export/print functionality.
+
+| Feature | Why Expected | Complexity |
+|---------|--------------|------------|
+| **PDF export option** | Door-to-door canvassing standard. Field workers need printable walk sheets. "Print walk sheets for door-to-door canvassing" is explicit feature in campaign tools. | High |
+| **Zone name + assignment visible** | Core purpose = know who covers which zone. Must be prominent on export. | Low |
+| **Street list included** | Territory maps for field service include street lists. Political campaign "walk sheets" list streets. Without streets, export is just a map image (not actionable). | Medium-High |
+| **Assigned team member(s) contact info** | Field workers need to know who else is in their zone or contact coordinator. Standard in territory management. | Low |
+| **Map visual of zone boundary** | Users expect visual + data. Map shows spatial context (where zone is relative to landmarks). | Medium |
+| **Export per zone** | Standard pattern: "Export territory assignments" generates per-territory files. Users distribute sheets to assigned workers. | Medium |
+| **CSV export option** | Alternative format for data manipulation. Field service apps provide "export to CSV" for integration with other systems. | Medium |
+
+### Differentiators
+
+Features that would make it better than basic implementation.
+
+| Feature | Value Proposition | Complexity | Notes |
+|---------|-------------------|------------|-------|
+| **Street list from OpenStreetMap** | Accurate, free, always current. Overpass API allows extracting streets within polygon boundary. Better than manual street entry. | High | Use Overpass API query: ways within area |
+| **Checkbox list format for tracking** | Makes printout actionable. Workers can check off streets as they complete distribution. Common in door-to-door sales apps. | Low | Add checkbox column to street list |
+| **Building count estimate visible** | v1.0 already has this feature. Export should include it so workers know expected volume. Helps with time estimation. | Low | Already calculated, just display |
+| **Export all zones at once (batch)** | Convenience for coordinator. Generate all walk sheets in one click vs per-zone clicks. | Medium | ZIP file with PDFs or single multi-page PDF |
+| **Zone map with neighboring zones visible** | Spatial context. Worker knows if they're near other zones, can coordinate with neighbors. | Medium | Show zone highlighted + adjacent zones faded |
+| **Export filename with zone name** | Organizational convenience. "Zone-Centre-Ville.pdf" vs "export-1.pdf". | Low | Sanitize zone name for filesystem |
+| **Print-optimized layout** | Margins, page breaks, readability. Territory mapping apps export "high-quality visuals for stakeholder presentations". | Medium | CSS print styles, A4 portrait orientation |
+
+### Anti-Features
+
+Things to deliberately NOT build for v1.1.
+
+| Anti-Feature | Why Avoid | What to Do Instead |
+|--------------|-----------|-------------------|
+| **Interactive PDF (form fields)** | Complexity explosion (PDF generation libraries with forms). Workers will mark up physical printouts anyway. | Static PDF with checkbox graphics |
+| **QR code for mobile tracking** | Out of scope for v1.1. This is v2 "suivi distribution" feature. Requires backend for check-ins. | Defer to future milestone |
+| **Route optimization within zone** | "Optimisation automatique de répartition" explicitly in v2 scope. Complex algorithm, not needed for MVP export. | List streets alphabetically, let worker decide route |
+| **Photos/satellite view in export** | Increases file size significantly. OSM base map is sufficient. Not standard in walk sheet exports. | Stick to OSM tile rendering |
+| **Per-worker custom exports** | FlyerMap is coordinator tool, not worker tool. Coordinator generates and distributes exports. | Export by zone only, coordinator distributes |
+| **Email delivery from app** | No backend, LocalStorage only. Coordinator will email/print manually. | Download files, coordinator handles distribution |
+| **Historical export archive** | Not needed for campaign use case. Workers get current assignment, past versions irrelevant. | Single-point-in-time export |
+| **Multi-language exports** | Campaign is local French commune. No internationalization needed for v1.1. | French-only export labels |
+
+---
 
 ## Feature Dependencies
 
+**Wizard Flow:**
 ```
-Core Map Display
-    ├─> Marker Display
-    │       ├─> Search/Filter Markers
-    │       └─> Visual Assignment Status
-    │
-    ├─> Polygon Drawing
-    │       ├─> Polygon Editing
-    │       ├─> Zone Metadata
-    │       ├─> Zone Statistics
-    │       └─> Visual Zone Boundaries
-    │
-    └─> Zoom/Pan Controls
-
-Save/Load System
-    ├─> Export (extends Save)
-    └─> Import (extends Load)
-
-Marker-to-Zone Assignment
-    ├─> Requires: Markers + Polygons
-    └─> Enables: Auto-assignment by Proximity
-
-Undo/Redo
-    └─> Requires: State management for all drawing operations
+Welcome Screen
+    ↓
+Postal Code Entry → Commune Confirmation
+    ↓
+CSV Upload → Column Mapping → Validation
+    ↓
+Generate Map → Success Screen
 ```
 
-**Critical path for MVP:** Core Map Display → Marker Display → Polygon Drawing → Polygon Editing → Save/Load → Marker-to-Zone Assignment
+**Export Flow:**
+```
+Select Zone(s)
+    ↓
+Fetch OSM Streets (Overpass API)
+    ↓
+Generate Layout (map + street list + assignment)
+    ↓
+Export Format Choice (PDF / CSV)
+    ↓
+Download File
+```
 
-**Can be deferred:** Undo/Redo, Search/Filter, Zone Statistics, Import, Offline
+**Dependencies on Existing Features:**
+- Wizard depends on: commune boundary API (v1.0), geocoding API (v1.0), CSV parsing (v1.0)
+- Export depends on: zone polygons (v1.0), assignments (v1.0), building estimates (v1.0)
+- Export adds: OSM Overpass API integration, PDF generation library, CSV export logic
 
-## Complexity Analysis
+---
 
-### Low Complexity (1-2 days)
-- Interactive basemap display
-- Zoom/pan controls
-- Marker display
-- Visual zone boundaries
-- Zone metadata (data model)
-- Visual assignment status
-- Export to GeoJSON
-- Search/filter markers
+## MVP Recommendation for v1.1
 
-### Medium Complexity (3-5 days)
-- Polygon drawing
-- Polygon editing
-- Save to localStorage
-- Load from localStorage + file
-- Marker-to-zone assignment logic
-- Auto-assignment by proximity
-- Import existing data
-- Undo/redo
-- Zone statistics
-- Mobile-friendly responsive design
+### Wizard Onboarding - Include in v1.1:
 
-### High Complexity (1-2 weeks)
-- Offline capability (service workers, sync, IndexedDB)
-- Advanced geocoding (if addresses need conversion)
-- Complex polygon operations (merge, split, buffer)
+**Must-have (table stakes):**
+1. Welcome screen with "Get Started" CTA
+2. 4-step wizard: Postal Code → Confirm Commune → Upload CSV → View Map
+3. Progress indicator (1/4, 2/4, 3/4, 4/4)
+4. Postal code validation with commune lookup
+5. CSV upload with drag-and-drop
+6. Basic validation (required columns, geocoding errors)
+7. Success screen with "Open Map" button
 
-## MVP Recommendation
+**Nice-to-have (differentiators for polish):**
+- Postal code field shows commune preview on blur
+- Sample CSV download link
+- CSV column auto-detection (match "adresse"/"address"/"Address" variants)
+- Inline error messages for geocoding failures
 
-For MVP (Minimum Viable Product), prioritize this sequence:
+**Defer to post-v1.1:**
+- Progress persistence across refreshes (not critical for 3-minute wizard)
+- Browser geolocation shortcut
+- Advanced CSV column mapping UI
 
-### Phase 1: Core Interaction (Week 1)
-1. Interactive basemap with French commune view (IGN or OSM tiles)
-2. Marker display for team member locations
-3. Zoom/pan controls
-4. Polygon drawing (basic click-to-create)
-5. Visual zone boundaries
+### Zone Export - Include in v1.1:
 
-**Exit criteria:** Can view map, place markers, draw zones, see what was drawn
+**Must-have (table stakes):**
+1. "Export Zone" button on zone detail panel
+2. PDF format with:
+   - Zone name (large, top)
+   - Assigned team member(s) with phone numbers
+   - Map showing zone boundary
+   - Street list from OSM (alphabetical, with checkboxes)
+   - Building count estimate
+3. CSV format with: zone name, assigned members, street names
+4. Export filename includes zone name
 
-### Phase 2: Persistence (Week 1)
-6. Save work (localStorage + JSON download)
-7. Load work (localStorage restore + file upload)
-8. Zone metadata (name, notes)
+**Nice-to-have (differentiators for polish):**
+- "Export All Zones" button (generates ZIP or multi-page PDF)
+- Print-optimized CSS (margins, page breaks)
+- Neighboring zones visible (faded) on map
 
-**Exit criteria:** Work persists across sessions; can share work via file
+**Defer to post-v1.1:**
+- Interactive PDF forms
+- QR codes for tracking
+- Route optimization
+- Email delivery
 
-### Phase 3: Assignment Logic (Week 2)
-9. Polygon editing (move vertices, delete)
-10. Marker-to-zone assignment (manual: click marker → select zone)
-11. Visual assignment status (color-coded zones)
-12. Auto-assignment by proximity
+---
 
-**Exit criteria:** Can assign team members to zones; coordinator saves hours
+## Implementation Notes
 
-### Phase 4: Polish (Week 2)
-13. Undo/redo
-14. Search markers
-15. Zone statistics (area, member count)
-16. Export to shareable format (KML or enhanced GeoJSON)
+### Wizard State Management
 
-**Exit criteria:** Tool feels professional and prevents frustration
+Store wizard progress in LocalStorage to handle:
+- User closes tab mid-wizard → resume on return
+- Step validation state (which steps completed)
+- Temporary commune selection before final confirmation
 
-### Defer to Post-MVP
-- Import CSV/JSON (can be added when user has data to import)
-- Offline capability (add if field testing reveals connectivity issues)
-- Mobile optimization (start desktop-first, add responsive if coordinator uses tablet/phone)
-- Advanced zone operations (merge, split—rarely needed in practice)
+Clear wizard state once setup complete and redirect to main app.
 
-## Competitive Context
+### OSM Street Extraction
 
-**Existing tools coordinators might use:**
-- Google My Maps: Free, familiar, but weak on zone assignment logic
-- Scribble Maps: Drawing-focused, missing campaign-specific features
-- Desktop GIS (QGIS): Powerful but overkill and steep learning curve
-- Excel + manual work: Current state for many small campaigns
+**Overpass API Query Pattern:**
+```
+[out:json];
+area["name"="CommuneName"]["admin_level"="8"]->.commune;
+way(area.commune)[highway][name];
+out body;
+```
 
-**Our differentiation:** Purpose-built for campaign zone assignment with auto-proximity and immediate usability. Simpler than GIS, smarter than drawing tools, faster than spreadsheets.
+**Considerations:**
+- Overpass API has rate limits (check timestamp_areas_base)
+- Cache results per zone to avoid repeated queries
+- Handle unnamed streets (exclude or show as "Rue sans nom")
+- Filter highway types (exclude motorways, include residential/tertiary)
 
-## User Stories (Implied by Features)
+### PDF Generation Library Options
 
-1. **As a campaign coordinator, I want to** see a map of my commune **so that** I can visualize the geographic area
-2. **As a campaign coordinator, I want to** place markers for team member addresses **so that** I know where my team lives
-3. **As a campaign coordinator, I want to** draw zones on the map **so that** I can divide the commune into coverage areas
-4. **As a campaign coordinator, I want to** assign team members to zones **so that** everyone knows their responsibility
-5. **As a campaign coordinator, I want to** automatically assign based on proximity **so that** I don't waste time on manual placement
-6. **As a campaign coordinator, I want to** save my work **so that** I can continue later
-7. **As a campaign coordinator, I want to** export my zones **so that** I can share with the team
-8. **As a campaign coordinator, I want to** edit zones **so that** I can fix mistakes or adjust boundaries
-9. **As a campaign coordinator, I want to** see which zones are covered **so that** I know what still needs assignment
+Research needed in implementation phase, but common approaches:
+- **jsPDF** - Client-side, works with LocalStorage-only constraint
+- **Puppeteer** (backend) - Better rendering, but violates no-backend constraint
+- **Browser print CSS + Save as PDF** - Simplest, relies on browser print dialog
 
-## Technology Implications
+For v1.1 MVP, browser print CSS is likely sufficient (no library dependency).
 
-Based on feature requirements:
+### CSV Export Format
 
-**Map library choice:**
-- **Leaflet**: Recommended. Simpler API, lighter weight, sufficient for all table stakes + differentiators
-- **OpenLayers**: Overkill. Needed only if advanced GIS features required (we explicitly avoid these)
+```csv
+Zone,Assigned Members,Street Name,Building Count
+"Centre-Ville","Jean Dupont (06 12 34 56 78), Marie Martin (06 98 76 54 32)","Rue de la République",12
+"Centre-Ville","Jean Dupont (06 12 34 56 78), Marie Martin (06 98 76 54 32)","Avenue du Général de Gaulle",8
+```
 
-**Drawing library:**
-- Leaflet.draw (or leaflet-geoman): Mature plugins with polygon draw/edit
-- Note: Google Maps Drawing Library deprecated (August 2025, removed May 2026)—avoid Google Maps Platform
+One row per street, zone and members repeated.
 
-**Storage:**
-- localStorage: Sufficient for MVP (5-10MB limit is ample for coordinate data)
-- File export: JSON (GeoJSON format) for sharing and backups
-- Backend database: Not needed unless multi-user or sharing requirements emerge
-
-**Data format:**
-- GeoJSON: Standard, interoperable, human-readable, supported by all map libraries
-- Avoid proprietary formats
-
-**Geocoding:**
-- If needed (address → coordinates): Use free tier of Nominatim or French IGN API
-- For MVP: Coordinator can place markers manually on map (click to place)
-
-## Research Confidence
-
-| Area | Confidence | Notes |
-|------|------------|-------|
-| Table stakes features | HIGH | Consistent across all mapping apps; well-documented in Leaflet/OpenLayers |
-| Differentiators | MEDIUM | Based on campaign software research; assumptions about coordinator workflow |
-| Anti-features | MEDIUM | Inferred from enterprise features that don't fit single-user scope |
-| Complexity estimates | MEDIUM | Based on experience; could vary by developer skill |
-
-## Open Questions
-
-1. **Marker data source:** Do team member addresses already exist in structured form (CSV, spreadsheet), or will coordinator enter them manually on the map?
-   - *Impact:* Determines priority of import feature and whether geocoding is needed
-
-2. **Sharing model:** Does coordinator need to share read-only maps with team members, or just export zones for reference?
-   - *Impact:* If sharing needed, might require hosted solution (not just local files)
-
-3. **Zone complexity:** How many zones are typical? How complex are boundaries (simple circles vs irregular polygons)?
-   - *Impact:* Affects UI design for zone list and drawing tool choices
-
-4. **Update frequency:** Is this a "set up once" tool or iterative (frequent zone adjustments)?
-   - *Impact:* If frequent, undo/redo and versioning become more valuable
-
-5. **Team size:** 5 people? 50 people?
-   - *Impact:* Affects need for search/filter and whether marker clustering is needed
-
-These questions should be validated with the actual campaign coordinator user during requirements definition.
+---
 
 ## Sources
 
-### Territory Management & Campaign Software
-- [Maptive: 15 Best Sales Territory Mapping Software for 2026](https://www.maptive.com/15-best-sales-territory-mapping-software/)
-- [Monday.com: Best Sales Mapping Software Tools 2026](https://monday.com/blog/crm-and-sales/sales-mapping-software/)
-- [SalesMotion: Top 12 Sales Territory Mapping Software Tools for 2026](https://salesmotion.io/blog/sales-territory-mapping-software)
-- [KnockBase: Effortless Territory Management with Canvassing Software](https://www.knockbase.com/blog/how-canvassing-software-simplifies-territory-management-for-sales-teams)
-- [KnockBase: Territory Mapping Software Features](https://www.knockbase.com/features/territory-mapping-software)
-- [Campaign Knock: Political Canvassing App](https://campaignknock.com/)
-- [CallHub: Complete Canvassing Guide 2026](https://callhub.io/blog/canvassing/canvassing/)
-- [Maptive: Mapping Software for Political Campaigns](https://www.maptive.com/mapping-software-for-political-campaigns/)
-- [KnockBase: Political Canvassing Software](https://www.knockbase.com/political-canvassing-software)
-- [Qomon: Political Campaign Software](https://qomon.com/solutions/political-campaign)
+### Onboarding Wizards
+- [Onboarding Wizard Definition and Examples](https://userguiding.com/blog/what-is-an-onboarding-wizard-with-examples) - UserGuiding best practices
+- [17 Best Onboarding Flow Examples (2026)](https://whatfix.com/blog/user-onboarding-examples/) - Whatfix pattern compilation
+- [Wizard UI Pattern Guide](https://www.eleken.co/blog-posts/wizard-ui-pattern-explained) - When to use wizards, design principles
+- [Progress Trackers and Indicators](https://userguiding.com/blog/progress-trackers-and-indicators) - Progress UI patterns
+- [Multi-Step Form Best Practices (2025)](https://www.webstacks.com/blog/multi-step-form) - Form wizard completion rates
 
-### Web Mapping Core Features
-- [FME: Web Mapping 101 - How to Create Dynamic Web Maps](https://fme.safe.com/blog/2025/11/web-mapping-101-how-to-create-dynamic-web-maps/)
-- [Maptive: Online Mapping Tools & Features](https://www.maptive.com/features/)
-- [Shorthand: 10 Tools to Create Interactive Maps](https://shorthand.com/the-craft/tools-to-create-interactive-maps/index.html)
+### Territory Mapping & Field Service
+- [Territory Management Software Guide](https://www.espatial.com/territory-management) - eSpatial feature standards
+- [Dynamics 365 Field Service Territories](https://learn.microsoft.com/en-us/dynamics365/field-service/set-up-territories) - Microsoft territory patterns
+- [Best Sales Mapping Software (2026)](https://monday.com/blog/crm-and-sales/sales-mapping-software/) - Monday.com territory features
+- [Top Territory Mapping Software (2026)](https://salesmotion.io/blog/sales-territory-mapping-software) - Salesmotion territory management
 
-### Mapping Libraries
-- [Geoapify: Leaflet vs OpenLayers Comparison](https://www.geoapify.com/leaflet-vs-openlayers/)
-- [Leaflet Official Site](https://leafletjs.com/)
-- [OpenLayers Official Site](https://openlayers.org/)
-- [LogRocket: 5 JavaScript Mapping APIs Compared](https://blog.logrocket.com/javascript-mapping-apis-compared/)
-- [LogRocket: Leaflet Adoption Guide](https://blog.logrocket.com/leaflet-adoption-guide/)
+### Political Campaign Tools
+- [NationBuilder: Cut Turf and Print Walk Sheets](https://support.nationbuilder.com/en/articles/2363270-campaign-cut-turf-and-print-walk-sheets) - Walk sheet standard format
+- [Knockbase Door-to-Door Canvassing Software](https://www.knockbase.com/) - Territory assignment and mobile features
+- [Political Campaign Mapping (Maptive)](https://www.maptive.com/mapping-software-for-political-campaigns/) - Campaign territory patterns
+- [Best Political Campaign Software (2026)](https://research.com/software/best-political-campaign-software) - Feature comparison
 
-### Drawing & GeoJSON
-- [Google Developers: Drawing Polygons (note: Drawing Library deprecated)](https://developers.google.com/maps/documentation/javascript/shapes)
-- [Spatialized: Drawing on Google Maps](https://spatialized.io/insights/google-maps/interactivity-and-events/drawing)
-- [geojson.io: Web-Based GeoJSON Editor](https://geojson.io/)
-- [Leaflet: Using GeoJSON](https://leafletjs.com/examples/geojson/)
-- [Google Developers: Data Layer (GeoJSON)](https://developers.google.com/maps/documentation/javascript/datalayer)
+### CSV Import & Validation
+- [Best UI Patterns for File Uploads](https://blog.csvbox.io/file-upload-patterns/) - CSVBox upload UX
+- [How to Design Bulk Import UX](https://smart-interface-design-patterns.com/articles/bulk-ux/) - Smart Interface Design validation patterns
+- [5 Common Data Import Errors](https://dromo.io/blog/common-data-import-errors-and-how-to-fix-them) - Dromo error handling
+- [CSV Geocoding Best Practices](https://support.esri.com/en-us/knowledge-base/faq-what-are-some-best-practices-for-geocoding-addresse-000021393) - ESRI geocoding workflow
 
-### Marker Clustering & Proximity
-- [Google Developers: Marker Clustering](https://developers.google.com/maps/documentation/javascript/marker-clustering)
-- [Google Maps Platform Blog: How to Cluster Map Markers](https://mapsplatform.google.com/resources/blog/how-cluster-map-markers/)
+### Location Picker & Postal Code UX
+- [Checkout UX: Zip Code Auto-detection](https://baymard.com/blog/zip-code-auto-detection) - Baymard postal code patterns
+- [Postcode Lookup UX Requirements](https://econsultancy.com/seven-important-ux-requirements-for-online-postcode-validation/) - Econsultancy validation best practices
+- [Address Field Design Best Practices](https://uxplanet.org/address-field-design-best-practices-a80390caaee0) - UX Planet address forms
 
-### Common Pitfalls
-- [LinkedIn: Common Pitfalls and Best Practices for Web Mapping](https://www.linkedin.com/advice/1/what-some-common-pitfalls-best-practices-web-mapping)
-- [Digital Initiatives: Top Mapping Mistakes](https://gcdi.commons.gc.cuny.edu/2021/05/12/top-mapping-mistakes/)
-- [MDPI: Web Map Effectiveness in Responsive UI Context](https://www.mdpi.com/2220-9964/10/3/134)
+### OpenStreetMap Integration
+- [Overpass API by Example](https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_API_by_Example) - OSM query patterns
+- [Overpass API Language Guide](https://wiki.openstreetmap.org/wiki/Overpass_API/Language_Guide) - Official OSM documentation
+- [Extract Streets from Polygon (OSM Help)](https://help.openstreetmap.org/questions/85980/how-to-get-all-nodes-and-streets-of-any-polygon-with-a-known-user-current-location) - OSM community solutions
+- [Overpass Query for Street Names](https://gist.github.com/JamesChevalier/b861388d35476cee4fcc3626a60af60f) - GitHub Gist example
 
-### Fleet & Zone Management Examples
-- [Volvo Buses: Save Time with Upgraded Map Tool 2026](https://www.volvobuses.com/gr/news-stories/volvo-connect-news/2026/jan/save-time-with-the-upgraded-map-tool.html)
+---
+
+## Confidence Assessment
+
+| Area | Level | Reason |
+|------|-------|--------|
+| Wizard UX patterns | HIGH | Multiple authoritative sources (UserGuiding, NN/G, Material UI) agree on standards |
+| Territory export features | MEDIUM | Extrapolated from field service and political campaign tools, but FlyerMap use case is niche |
+| CSV validation patterns | HIGH | Well-documented in bulk import literature (CSVBox, Smart Interface Design) |
+| OSM street extraction | MEDIUM | OSM community examples exist, but implementation complexity varies |
+| PDF generation approach | LOW | Needs phase-specific research to evaluate library options within constraints |
+
+---
+
+## Next Steps for Requirements Definition
+
+1. **Specify exact wizard step flow** - Detail each screen (inputs, validation, messaging)
+2. **Define CSV column requirements** - Which fields required vs optional, header variants to detect
+3. **Research PDF generation libraries** - Evaluate options compatible with LocalStorage-only constraint
+4. **Design export layout** - Mockup for print format (A4 dimensions, margins, font sizes)
+5. **Define OSM query specifics** - Which highway types to include, how to handle unnamed streets
+6. **Plan error handling** - What happens when OSM API unavailable, geocoding fails, CSV invalid
