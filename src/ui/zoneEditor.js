@@ -15,12 +15,10 @@ export function initZoneEditor() {
   dialog = document.getElementById('zone-editor');
   const form = dialog.querySelector('form');
 
-  // Handle form submission
-  form.addEventListener('submit', (e) => {
+  // Handle dialog close to process form data
+  dialog.addEventListener('close', () => {
     // Check if user clicked "save" button
-    if (form.returnValue === 'save') {
-      e.preventDefault(); // Prevent default dialog close to handle data first
-
+    if (dialog.returnValue === 'save') {
       // Get zone ID from dialog dataset
       const zoneId = dialog.dataset.zoneId;
       if (!zoneId) {
@@ -49,13 +47,12 @@ export function initZoneEditor() {
       // Update visual style immediately
       updateZoneStyle(zoneId);
 
-      // Clear form and close dialog
-      form.reset();
-      dialog.close();
-    } else {
-      // User clicked cancel - form.reset() and dialog.close() handled automatically by method="dialog"
-      form.reset();
+      // Update popup content
+      // Note: This will be reflected when zone is clicked again
     }
+
+    // Reset form for both save and cancel
+    form.reset();
   });
 }
 

@@ -141,11 +141,12 @@ function loadZonesFromStore() {
         // Apply correct style based on assignment
         updateZoneStyle(zone.id);
 
-        // Bind popup
-        layer.bindPopup(`<strong>${zone.name}</strong>`);
-
-        // Bind click event to open editor
+        // Bind click event to open editor (no popup - editor is better UX)
         layer.on('click', (e) => {
+          // Don't open editor if we're in edit mode
+          if (map.pm.globalEditModeEnabled() || map.pm.globalRemovalModeEnabled()) {
+            return;
+          }
           L.DomEvent.stopPropagation(e);
           const currentZone = store.getZones().find(z => z.id === zone.id);
           if (currentZone) {
@@ -199,11 +200,12 @@ function setupEventHandlers() {
       geojson: layer.toGeoJSON()
     });
 
-    // Bind popup with zone name
-    layer.bindPopup(`<strong>${finalName}</strong>`);
-
-    // Bind click event to open editor
+    // Bind click event to open editor (no popup - editor is better UX)
     layer.on('click', (e) => {
+      // Don't open editor if we're in edit mode
+      if (map.pm.globalEditModeEnabled() || map.pm.globalRemovalModeEnabled()) {
+        return;
+      }
       L.DomEvent.stopPropagation(e);
       const zone = store.getZones().find(z => z.id === zoneId);
       if (zone) {
