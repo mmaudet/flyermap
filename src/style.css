@@ -567,3 +567,56 @@ progress::-moz-progress-bar {
   font-style: italic;
   margin-top: 8px;
 }
+
+/* Reconfigure confirmation dialog */
+dialog#reconfigure-confirm {
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  padding: 0;
+  max-width: 450px;
+  width: 90%;
+}
+
+dialog#reconfigure-confirm::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+dialog#reconfigure-confirm form {
+  padding: 24px;
+}
+
+dialog#reconfigure-confirm h3 {
+  margin: 0 0 20px 0;
+  font-size: 20px;
+  color: #111827;
+}
+
+.warning-content {
+  margin-bottom: 20px;
+}
+
+.warning-content ul {
+  margin: 12px 0;
+  padding-left: 24px;
+}
+
+.warning-content li {
+  margin-bottom: 4px;
+  color: #374151;
+}
+
+.warning-content .warning {
+  color: #dc2626;
+  margin-top: 16px;
+}
+
+.btn-reconfigure {
+  background: #f3f4f6;
+  color: #374151;
+  border: 1px solid #d1d5db;
+}
+
+.btn-reconfigure:hover {
+  background: #e5e7eb;
+}
