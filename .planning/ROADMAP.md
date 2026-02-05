@@ -42,10 +42,12 @@ Plans:
   3. User can click a marker to see team member details (name, address, phone)
   4. User can view the complete team list in a side panel with color coding
   5. Team member data persists across browser sessions via LocalStorage
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] TBD (planned during phase planning)
+- [ ] 02-01-PLAN.md — Core infrastructure: LocalStorage wrapper, PubSub state manager, colored marker styles
+- [ ] 02-02-PLAN.md — Data services: Géoplateforme geocoding, PapaParse CSV import
+- [ ] 02-03-PLAN.md — UI integration: marker layer, side panel, import flow wiring
 
 ### Phase 3: Zone Creation
 **Goal**: User can draw and edit distribution zones on the map
@@ -86,7 +88,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 1/1 | Complete ✓ | 2026-02-05 |
-| 2. Team Management | 0/TBD | Not started | - |
+| 2. Team Management | 0/3 | Not started | - |
 | 3. Zone Creation | 0/TBD | Not started | - |
 | 4. Assignment System | 0/TBD | Not started | - |
 
