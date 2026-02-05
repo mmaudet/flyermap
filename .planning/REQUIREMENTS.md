@@ -15,10 +15,10 @@ Requirements pour la version initiale. Chaque requirement est mappé aux phases 
 
 ### Colistiers
 
-- [ ] **TEAM-01**: Importer les colistiers depuis un fichier CSV/JSON avec géocodage automatique (Géoplateforme API)
-- [ ] **TEAM-02**: Afficher un marqueur coloré pour chaque colistier sur la carte
-- [ ] **TEAM-03**: Afficher popup avec nom, adresse, téléphone au clic sur un marqueur
-- [ ] **TEAM-04**: Afficher un panneau latéral avec la liste des colistiers et leurs couleurs
+- [x] **TEAM-01**: Importer les colistiers depuis un fichier CSV/JSON avec géocodage automatique (Géoplateforme API) ✓
+- [x] **TEAM-02**: Afficher un marqueur coloré pour chaque colistier sur la carte ✓
+- [x] **TEAM-03**: Afficher popup avec nom, adresse, téléphone au clic sur un marqueur ✓
+- [x] **TEAM-04**: Afficher un panneau latéral avec la liste des colistiers et leurs couleurs ✓
 
 ### Zones
 
@@ -36,7 +36,7 @@ Requirements pour la version initiale. Chaque requirement est mappé aux phases 
 
 ### Persistance
 
-- [ ] **DATA-01**: Sauvegarder automatiquement les données dans LocalStorage
+- [x] **DATA-01**: Sauvegarder automatiquement les données dans LocalStorage ✓
 - [ ] **DATA-02**: Exporter les données complètes en fichier JSON
 - [ ] **DATA-03**: Importer les données depuis un fichier JSON sauvegardé
 
@@ -88,11 +88,11 @@ Quelle phase couvre quel requirement. Mis à jour lors de la création du roadma
 | MAP-01 | Phase 1 | Complete |
 | MAP-02 | Phase 1 | Complete |
 | MAP-03 | Phase 1 | Complete |
-| TEAM-01 | Phase 2 | Pending |
-| TEAM-02 | Phase 2 | Pending |
-| TEAM-03 | Phase 2 | Pending |
-| TEAM-04 | Phase 2 | Pending |
-| DATA-01 | Phase 2 | Pending |
+| TEAM-01 | Phase 2 | Complete |
+| TEAM-02 | Phase 2 | Complete |
+| TEAM-03 | Phase 2 | Complete |
+| TEAM-04 | Phase 2 | Complete |
+| DATA-01 | Phase 2 | Complete |
 | ZONE-01 | Phase 3 | Pending |
 | ZONE-02 | Phase 3 | Pending |
 | ZONE-03 | Phase 3 | Pending |
@@ -111,4 +111,4 @@ Quelle phase couvre quel requirement. Mis à jour lors de la création du roadma
 
 ---
 *Requirements defined: 2025-02-05*
-*Last updated: 2026-02-05 after Phase 1 completion*
+*Last updated: 2026-02-05 after Phase 2 completion*

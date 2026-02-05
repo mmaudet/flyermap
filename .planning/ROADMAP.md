@@ -13,7 +13,7 @@ Transform a list of volunteer addresses into an interactive zone management syst
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Foundation** - Interactive map with commune boundaries ✓
-- [ ] **Phase 2: Team Management** - Geocoded team markers with persistence
+- [x] **Phase 2: Team Management** - Geocoded team markers with persistence ✓
 - [ ] **Phase 3: Zone Creation** - Polygon drawing and editing
 - [ ] **Phase 4: Assignment System** - Connect team to zones with export
 
@@ -45,9 +45,9 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 02-01-PLAN.md — Core infrastructure: LocalStorage wrapper, PubSub state manager, colored marker styles
-- [ ] 02-02-PLAN.md — Data services: Géoplateforme geocoding, PapaParse CSV import
-- [ ] 02-03-PLAN.md — UI integration: marker layer, side panel, import flow wiring
+- [x] 02-01-PLAN.md — Core infrastructure: LocalStorage wrapper, PubSub state manager, colored marker styles ✓
+- [x] 02-02-PLAN.md — Data services: Géoplateforme geocoding, PapaParse CSV import ✓
+- [x] 02-03-PLAN.md — UI integration: marker layer, side panel, import flow wiring ✓
 
 ### Phase 3: Zone Creation
 **Goal**: User can draw and edit distribution zones on the map
@@ -88,7 +88,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 1/1 | Complete ✓ | 2026-02-05 |
-| 2. Team Management | 0/3 | Not started | - |
+| 2. Team Management | 3/3 | Complete ✓ | 2026-02-05 |
 | 3. Zone Creation | 0/TBD | Not started | - |
 | 4. Assignment System | 0/TBD | Not started | - |
 
