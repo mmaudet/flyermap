@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-02-05)
 
 **Core value:** Voir sur une carte les zones de distribution et qui est assigné où
-**Current focus:** v1.0 MVP shipped - Planning next milestone
+**Current focus:** v1.1 Généricité + Export
 
 ## Current Position
 
-Phase: v1.0 complete
-Plan: All plans shipped
-Status: Milestone v1.0 complete
-Last activity: 2026-02-05 — v1.0 milestone shipped
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-02-05 — Milestone v1.1 started
 
-Progress: [██████████] 100%
+Progress: [░░░░░░░░░░] 0%
 
 ## Performance Metrics
 

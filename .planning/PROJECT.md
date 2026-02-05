@@ -10,11 +10,27 @@ Application web interactive pour visualiser et gérer la répartition des zones 
 
 C'est l'outil qui permet au coordinateur de répartir efficacement le travail de distribution entre les colistiers, en privilégiant la proximité domicile-zone.
 
+## Current Milestone: v1.1 Généricité + Export
+
+**Goal:** Rendre l'application générique (wizard onboarding pour choisir la commune) et permettre l'export de fiches par zone avec rues OSM.
+
+**Target features:**
+- Wizard d'onboarding au premier lancement (code postal → commune → CSV colistiers)
+- Option de reconfigurer/changer de commune après le premier lancement
+- Export par zone : fiche avec colistiers assignés + rues depuis OpenStreetMap
+- Deux formats d'export : PDF imprimable + CSV
+
 ## Requirements
 
 ### Validated
 
-(None yet — ship to validate)
+- ✓ Carte interactive centrée sur commune avec contour — v1.0
+- ✓ Import CSV colistiers avec géocodage automatique — v1.0
+- ✓ Marqueurs colorés pour chaque colistier — v1.0
+- ✓ Zones de distribution dessinables et éditables — v1.0
+- ✓ Assignation colistiers aux zones — v1.0
+- ✓ Sauvegarde LocalStorage + Export/Import JSON — v1.0
+- ✓ Estimation OSM du nombre de bâtiments par zone — v1.0
 
 ### Active
 
