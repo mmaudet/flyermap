@@ -85,6 +85,19 @@ export function initZoneLayer(mapInstance) {
 }
 
 /**
+ * Remove a zone from the map and store
+ * @param {string} zoneId - Zone ID to remove
+ */
+export function removeZone(zoneId) {
+  const layer = layersByZoneId.get(zoneId);
+  if (layer) {
+    zoneGroup.removeLayer(layer);
+    layersByZoneId.delete(zoneId);
+  }
+  store.removeZone(zoneId);
+}
+
+/**
  * Update zone style based on assignment
  * @param {string} zoneId - Zone ID to update
  */

@@ -3,9 +3,12 @@
  * Handles team assignment, zone naming, and metadata editing
  */
 import { store } from '../state/store.js';
-import { updateZoneStyle } from '../map/zoneLayer.js';
+import { updateZoneStyle, removeZone } from '../map/zoneLayer.js';
+import { countBuildingsDetailed } from '../services/overpass.js';
+import { getTeamMemberColor } from '../map/markerStyles.js';
 
 let dialog = null;
+let currentZone = null;
 
 /**
  * Initialize zone editor dialog
@@ -14,6 +17,14 @@ let dialog = null;
 export function initZoneEditor() {
   dialog = document.getElementById('zone-editor');
   const form = dialog.querySelector('form');
+
+  // Handle estimate button
+  const estimateBtn = document.getElementById('estimate-btn');
+  estimateBtn.addEventListener('click', handleEstimate);
+
+  // Handle delete button
+  const deleteBtn = document.getElementById('delete-zone-btn');
+  deleteBtn.addEventListener('click', handleDelete);
 
   // Handle dialog close to process form data
   dialog.addEventListener('close', () => {
@@ -32,9 +43,9 @@ export function initZoneEditor() {
       const mailboxCount = formData.get('mailboxCount');
       const notes = formData.get('notes');
 
-      // Get selected members from multi-select
-      const selectElement = document.getElementById('assigned-members');
-      const assignedMembers = Array.from(selectElement.selectedOptions).map(option => option.value);
+      // Get selected members from checkboxes
+      const checkboxes = document.querySelectorAll('#members-checkboxes input[type="checkbox"]:checked');
+      const assignedMembers = Array.from(checkboxes).map(cb => cb.value);
 
       // Update zone in store
       store.updateZone(zoneId, {
@@ -46,14 +57,56 @@ export function initZoneEditor() {
 
       // Update visual style immediately
       updateZoneStyle(zoneId);
-
-      // Update popup content
-      // Note: This will be reflected when zone is clicked again
     }
 
-    // Reset form for both save and cancel
+    // Reset form and clear status
     form.reset();
+    document.getElementById('estimate-status').textContent = '';
+    currentZone = null;
   });
+}
+
+/**
+ * Handle delete button click
+ */
+function handleDelete() {
+  if (!currentZone) return;
+
+  const zoneName = currentZone.name || 'cette zone';
+  if (confirm(`Supprimer "${zoneName}" ? Cette action est irréversible.`)) {
+    removeZone(currentZone.id);
+    dialog.close();
+  }
+}
+
+/**
+ * Handle estimate button click
+ */
+async function handleEstimate() {
+  if (!currentZone || !currentZone.geojson) {
+    return;
+  }
+
+  const statusEl = document.getElementById('estimate-status');
+  const mailboxInput = document.getElementById('mailbox-count');
+  const estimateBtn = document.getElementById('estimate-btn');
+
+  try {
+    estimateBtn.disabled = true;
+    statusEl.textContent = 'Interrogation OpenStreetMap...';
+    statusEl.className = '';
+
+    const count = await countBuildingsDetailed(currentZone.geojson);
+
+    mailboxInput.value = count;
+    statusEl.textContent = `${count} bâtiments trouvés via OSM`;
+    statusEl.className = 'success';
+  } catch (error) {
+    statusEl.textContent = 'Erreur: impossible de contacter OSM';
+    statusEl.className = 'error';
+  } finally {
+    estimateBtn.disabled = false;
+  }
 }
 
 /**
@@ -65,6 +118,9 @@ export function openZoneEditor(zone) {
     console.error('Zone editor not initialized - dialog is null');
     return;
   }
+
+  // Store current zone for estimation
+  currentZone = zone;
 
   // Store zone ID for later reference
   dialog.dataset.zoneId = zone.id;
@@ -78,22 +134,42 @@ export function openZoneEditor(zone) {
   // Populate notes
   document.getElementById('zone-notes').value = zone.notes || '';
 
-  // Populate team member select
-  const selectElement = document.getElementById('assigned-members');
-  selectElement.innerHTML = ''; // Clear existing options
+  // Clear estimate status
+  document.getElementById('estimate-status').textContent = '';
+
+  // Populate team member checkboxes
+  const container = document.getElementById('members-checkboxes');
+  container.innerHTML = '';
 
   const teamMembers = store.getTeamMembers();
-  teamMembers.forEach(member => {
-    const option = document.createElement('option');
-    option.value = member.id;
-    option.textContent = `${member.name} - ${member.address}`;
+  teamMembers.forEach((member, index) => {
+    const isChecked = zone.assignedMembers && zone.assignedMembers.includes(member.id);
+    const color = getTeamMemberColor(index);
 
-    // Mark as selected if member is assigned to this zone
-    if (zone.assignedMembers && zone.assignedMembers.includes(member.id)) {
-      option.selected = true;
-    }
+    const label = document.createElement('label');
+    label.className = `member-checkbox ${isChecked ? 'checked' : ''}`;
+    label.style.borderLeftColor = color;
 
-    selectElement.appendChild(option);
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.value = member.id;
+    checkbox.checked = isChecked;
+    checkbox.addEventListener('change', () => {
+      label.classList.toggle('checked', checkbox.checked);
+    });
+
+    const colorDot = document.createElement('span');
+    colorDot.className = 'color-dot';
+    colorDot.style.backgroundColor = color;
+
+    const nameSpan = document.createElement('span');
+    nameSpan.className = 'member-name';
+    nameSpan.textContent = member.name;
+
+    label.appendChild(checkbox);
+    label.appendChild(colorDot);
+    label.appendChild(nameSpan);
+    container.appendChild(label);
   });
 
   // Show the dialog as modal

@@ -146,6 +146,23 @@ html, body {
   text-overflow: ellipsis;
 }
 
+/* Zone badge on team members */
+.zone-badge {
+  background: #2563eb;
+  color: white;
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 12px;
+  white-space: nowrap;
+  margin-left: 8px;
+  flex-shrink: 0;
+}
+
+.zone-badge.empty {
+  background: #e5e7eb;
+  color: #6b7280;
+}
+
 /* Zone editor dialog */
 dialog#zone-editor {
   border: none;
@@ -247,6 +264,120 @@ dialog#zone-editor h3 {
 
 .btn-secondary:hover {
   background: #d1d5db;
+}
+
+.btn-danger {
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  background: #dc2626;
+  color: white;
+}
+
+.btn-danger:hover {
+  background: #b91c1c;
+}
+
+.button-spacer {
+  flex: 1;
+}
+
+/* Members checkboxes in zone editor */
+.members-checkboxes {
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  padding: 4px;
+}
+
+.member-checkbox {
+  display: flex;
+  align-items: center;
+  padding: 8px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  border-left: 3px solid transparent;
+  margin-bottom: 2px;
+  background: #f9fafb;
+  transition: background-color 0.15s;
+}
+
+.member-checkbox:hover {
+  background: #f3f4f6;
+}
+
+.member-checkbox.checked {
+  background: #eff6ff;
+}
+
+.member-checkbox input[type="checkbox"] {
+  margin-right: 8px;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.member-checkbox .color-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+
+.member-checkbox .member-name {
+  font-size: 14px;
+  font-weight: normal;
+}
+
+/* Input with button */
+.input-with-button {
+  display: flex;
+  gap: 8px;
+}
+
+.input-with-button input {
+  flex: 1;
+}
+
+.btn-estimate {
+  padding: 8px 12px;
+  background: #059669;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn-estimate:hover {
+  background: #047857;
+}
+
+.btn-estimate:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+/* Estimate status */
+#estimate-status {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+#estimate-status.success {
+  color: #059669;
+}
+
+#estimate-status.error {
+  color: #dc2626;
 }
 
 /* Panel footer with export/import controls */
