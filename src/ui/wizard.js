@@ -10,12 +10,17 @@ import '@adrii_/wizard-js/style.css';
 import L from 'leaflet';
 import { searchCommunesByPostalCode } from '../data/commune.js';
 import { saveCommuneConfig } from '../data/storage.js';
+import { parseCSV, validateTeamMembers, normalizeTeamMember } from '../services/csvImport.js';
 
 // Module-scoped wizard instance (may be recreated)
 let wizard = null;
 
 // Selected commune from postal code lookup
 let selectedCommune = null;
+
+// CSV import state
+let selectedFile = null;
+let validatedMembers = null;
 
 /**
  * Initialize and display the welcome wizard
@@ -63,6 +68,9 @@ export function initWelcomeWizard() {
 
   // Setup preview step handler
   setupPreviewStep();
+
+  // Setup upload step handler
+  setupUploadStep();
 
   // Setup wizard completion handler
   setupWizardCompletion();
@@ -201,6 +209,105 @@ function setupPreviewStep() {
       setTimeout(() => showCommunePreview(selectedCommune), 100);
     }
   });
+}
+
+/**
+ * Setup upload step with drag-and-drop support
+ *
+ * Handles CSV file upload via drag-and-drop or file browser button.
+ */
+function setupUploadStep() {
+  const dropZone = document.getElementById('csv-drop-zone');
+  const fileInput = document.getElementById('wizard-csv-input');
+  const fileInfo = document.getElementById('csv-file-info');
+
+  if (!dropZone || !fileInput) {
+    console.error('Upload step elements not found');
+    return;
+  }
+
+  // Prevent default drag behaviors
+  ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    dropZone.addEventListener(eventName, (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+    });
+  });
+
+  // Add visual feedback on drag
+  ['dragenter', 'dragover'].forEach(eventName => {
+    dropZone.addEventListener(eventName, () => {
+      dropZone.classList.add('drag-over');
+    });
+  });
+
+  ['dragleave', 'drop'].forEach(eventName => {
+    dropZone.addEventListener(eventName, () => {
+      dropZone.classList.remove('drag-over');
+    });
+  });
+
+  // Handle drop event
+  dropZone.addEventListener('drop', (e) => {
+    const files = e.dataTransfer.files;
+    const csvFile = Array.from(files).find(f => f.name.toLowerCase().endsWith('.csv'));
+
+    if (!csvFile) {
+      if (fileInfo) {
+        fileInfo.hidden = false;
+        fileInfo.innerHTML = '<span class="error">Veuillez deposer un fichier CSV</span>';
+      }
+      return;
+    }
+
+    handleFileSelected(csvFile);
+  });
+
+  // Handle file input change
+  fileInput.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      handleFileSelected(file);
+    }
+  });
+}
+
+/**
+ * Handle file selection from drop or file picker
+ *
+ * Validates file extension, warns on large files, and updates UI.
+ *
+ * @param {File} file - Selected file
+ */
+function handleFileSelected(file) {
+  const fileInfo = document.getElementById('csv-file-info');
+
+  // Validate extension
+  if (!file.name.toLowerCase().endsWith('.csv')) {
+    if (fileInfo) {
+      fileInfo.hidden = false;
+      fileInfo.innerHTML = '<span class="error">Le fichier doit etre au format CSV</span>';
+    }
+    return;
+  }
+
+  // Warn if file > 1MB
+  if (file.size > 1024 * 1024) {
+    if (!confirm(`Le fichier fait ${(file.size / 1024 / 1024).toFixed(1)} Mo. Continuer ?`)) {
+      return;
+    }
+  }
+
+  // Store file and clear previous validation
+  selectedFile = file;
+  validatedMembers = null;
+
+  // Show file info
+  if (fileInfo) {
+    fileInfo.hidden = false;
+    const sizeKB = (file.size / 1024).toFixed(1);
+    fileInfo.innerHTML = `<strong>${file.name}</strong> (${sizeKB} Ko)`;
+  }
 }
 
 /**
