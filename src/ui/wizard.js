@@ -11,6 +11,8 @@ import L from 'leaflet';
 import { searchCommunesByPostalCode } from '../data/commune.js';
 import { saveCommuneConfig } from '../data/storage.js';
 import { parseCSV, validateTeamMembers, normalizeTeamMember } from '../services/csvImport.js';
+import { geocodeAddress } from '../services/geocoding.js';
+import { store } from '../state/store.js';
 
 // Module-scoped wizard instance (may be recreated)
 let wizard = null;
@@ -207,6 +209,12 @@ function setupPreviewStep() {
     if (wizard && wizard.current_step === 4) {
       setTimeout(() => runValidationStep(), 100);
     }
+
+    // Check if we're moving from Validation step (5) to Confirmation step (6)
+    // Run geocoding after the step transition completes
+    if (wizard && wizard.current_step === 5) {
+      setTimeout(() => runGeocodingStep(), 100);
+    }
   });
 
   // Also handle nav clicks
@@ -381,6 +389,112 @@ async function runValidationStep() {
     resultsContainer.innerHTML = '<div class="error-box"><p class="error">Erreur lors de l\'analyse du fichier CSV</p></div>';
     return false;
   }
+}
+
+/**
+ * Run geocoding step - geocode validated addresses with progress
+ *
+ * Geocodes each address sequentially with visual progress feedback,
+ * saves successful results to store, and displays summary.
+ *
+ * @returns {Promise<boolean>} True if geocoding completed
+ */
+async function runGeocodingStep() {
+  const progressContainer = document.getElementById('geocoding-progress');
+  const summaryContainer = document.getElementById('import-summary');
+
+  if (!progressContainer || !summaryContainer) {
+    console.error('Geocoding step elements not found');
+    return false;
+  }
+
+  // Check if we have validated members
+  if (!validatedMembers || validatedMembers.length === 0) {
+    progressContainer.innerHTML = '<p class="error">Aucun colistier a geocoder. Retournez a l\'etape precedente.</p>';
+    return false;
+  }
+
+  const count = validatedMembers.length;
+
+  // Initialize progress UI
+  progressContainer.hidden = false;
+  summaryContainer.hidden = true;
+  progressContainer.innerHTML = `
+    <p>Geocodage des adresses: <span id="geo-current">0</span>/${count}</p>
+    <progress id="geo-bar" max="${count}" value="0"></progress>
+    <p id="geo-status" class="status"></p>
+  `;
+
+  const currentSpan = document.getElementById('geo-current');
+  const progressBar = document.getElementById('geo-bar');
+  const statusText = document.getElementById('geo-status');
+
+  // Track results
+  let successCount = 0;
+  let failedCount = 0;
+  const failedNames = [];
+
+  // Process each member sequentially
+  for (let i = 0; i < validatedMembers.length; i++) {
+    const member = validatedMembers[i];
+
+    // Update status
+    statusText.textContent = `Traitement: ${member.name}...`;
+
+    try {
+      // Geocode the address
+      const result = await geocodeAddress(member.address);
+
+      // Save to store with geocoded coordinates
+      store.addTeamMember({
+        name: member.name,
+        address: member.address,
+        phone: member.phone,
+        lat: result.lat,
+        lng: result.lng,
+        geocodeScore: result.score
+      });
+
+      successCount++;
+    } catch (error) {
+      failedCount++;
+      failedNames.push(member.name);
+      console.warn(`Geocoding failed for ${member.name}:`, error.message);
+    }
+
+    // Update progress
+    currentSpan.textContent = i + 1;
+    progressBar.value = i + 1;
+
+    // Rate limiting: wait 20ms between requests (except after last)
+    if (i < validatedMembers.length - 1) {
+      await new Promise(resolve => setTimeout(resolve, 20));
+    }
+  }
+
+  // Hide progress, show summary
+  progressContainer.hidden = true;
+  summaryContainer.hidden = false;
+
+  // Build summary HTML
+  let summaryHtml = `<p class="success"><strong>${successCount} colistier(s) ajoute(s) avec succes!</strong></p>`;
+
+  if (failedCount > 0) {
+    summaryHtml += `
+      <div class="warning">
+        <p><strong>${failedCount} adresse(s) non trouvee(s):</strong></p>
+        <ul class="failed-list">
+          ${failedNames.map(name => `<li>${escapeHtml(name)}</li>`).join('')}
+        </ul>
+        <p class="hint">Ces colistiers peuvent etre ajoutes manuellement plus tard.</p>
+      </div>
+    `;
+  }
+
+  summaryHtml += `<p>Cliquez sur 'Terminer' pour afficher la carte.</p>`;
+  summaryContainer.innerHTML = summaryHtml;
+
+  return true;
 }
 
 /**
