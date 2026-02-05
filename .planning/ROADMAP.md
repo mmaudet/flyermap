@@ -66,7 +66,7 @@ Plans:
 **Plans:** 3 plans
 
 Plans:
-- [ ] 06-01-PLAN.md — Wizard HTML steps and CSV template
+- [x] 06-01-PLAN.md — Wizard HTML steps and CSV template
 - [ ] 06-02-PLAN.md — File upload and validation with error display
 - [ ] 06-03-PLAN.md — Geocoding progress and wizard completion
 
@@ -128,7 +128,7 @@ Plans:
 | 3. Zone Creation | v1.0 | 3/3 | Complete | 2026-02-05 |
 | 4. Assignment System | v1.0 | 3/3 | Complete | 2026-02-05 |
 | 5. Wizard Foundation | v1.1 | 3/3 | Complete | 2026-02-05 |
-| 6. CSV Import in Wizard | v1.1 | 0/3 | Planned | — |
+| 6. CSV Import in Wizard | v1.1 | 1/3 | In Progress | — |
 | 7. Reconfiguration | v1.1 | 0/TBD | Pending | — |
 | 8. Zone Export | v1.1 | 0/TBD | Pending | — |
 
