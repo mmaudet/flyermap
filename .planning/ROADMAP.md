@@ -89,7 +89,11 @@ Plans:
 3. User can cancel reconfiguration and keep existing data
 4. User can confirm and restart wizard to change commune
 
-**Plans:** 0/TBD
+**Plans:** 2 plans
+
+Plans:
+- [ ] 07-01-PLAN.md — Reconfigure dialog HTML/CSS and button in panel footer
+- [ ] 07-02-PLAN.md — Wire reconfigure logic with data clearing and wizard restart
 
 ---
 
@@ -129,7 +133,7 @@ Plans:
 | 4. Assignment System | v1.0 | 3/3 | Complete | 2026-02-05 |
 | 5. Wizard Foundation | v1.1 | 3/3 | Complete | 2026-02-05 |
 | 6. CSV Import in Wizard | v1.1 | 3/3 | Complete | 2026-02-05 |
-| 7. Reconfiguration | v1.1 | 0/TBD | Pending | — |
+| 7. Reconfiguration | v1.1 | 0/2 | Planned | — |
 | 8. Zone Export | v1.1 | 0/TBD | Pending | — |
 
 ---
@@ -152,10 +156,10 @@ See [v1.0 Archive](milestones/v1.0-ROADMAP.md) for full details.
 
 ## Next Steps
 
-To plan Phase 7:
+To execute Phase 7:
 ```
-/gsd:plan-phase 7
+/gsd:execute-phase 7
 ```
 
 ---
-*Roadmap updated: 2026-02-05 after Phase 6 completion*
+*Roadmap updated: 2026-02-05 after Phase 7 planning*
