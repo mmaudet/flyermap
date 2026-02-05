@@ -170,4 +170,18 @@ function setupEventHandlers() {
       });
     }
   });
+
+  // Handle zone removal
+  map.on('pm:remove', (e) => {
+    const layer = e.layer;
+    const zoneId = layer.options.zoneId;
+
+    if (zoneId) {
+      // Remove from store
+      store.removeZone(zoneId);
+
+      // Clean up layer reference
+      layersByZoneId.delete(zoneId);
+    }
+  });
 }
