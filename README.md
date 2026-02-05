@@ -2,6 +2,8 @@
 
 **Application de gestion cartographique pour la distribution de tracts électoraux**
 
+![FlyerMap - Vue principale](docs/screenshots/flyermap-main.png)
+
 FlyerMap permet aux coordinateurs de campagne de visualiser et organiser la distribution de tracts sur une commune. L'application fonctionne entièrement en local (navigateur) sans serveur, garantissant la confidentialité des données personnelles (RGPD).
 
 ## Fonctionnalités
