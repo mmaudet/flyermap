@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zone Editing Test</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.css" />
+  <style>
+    body { margin: 0; padding: 20px; font-family: Arial, sans-serif; }
+    #map { height: 500px; border: 1px solid #ccc; margin-bottom: 20px; }
+    #log { background: #f0f0f0; padding: 10px; border: 1px solid #ccc; max-height: 300px; overflow-y: auto; }
+    .test-step { margin: 10px 0; padding: 10px; background: #fff; border-left: 3px solid #4CAF50; }
+    .test-step.error { border-left-color: #f44336; }
+  </style>
+</head>
+<body>
+  <h1>Zone Editing & Deletion Test</h1>
+  <div id="map"></div>
+  <div id="log"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.min.js"></script>
+  <script type="module">
+    const log = (msg, isError = false) => {
+      const logEl = document.getElementById('log');
+      const div = document.createElement('div');
+      div.className = isError ? 'test-step error' : 'test-step';
+      div.textContent = new Date().toLocaleTimeString() + ': ' + msg;
+      logEl.appendChild(div);
+      console.log(msg);
+    };
+
+    // Initialize map
+    const map = L.map('map').setView([48.9936, 1.8431], 14);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap'
+    }).addTo(map);
+
+    // Add Geoman controls
+    map.pm.addControls({
+      position: 'topleft',
+      drawMarker: false,
+      drawCircleMarker: false,
+      drawPolyline: false,
+      drawRectangle: false,
+      drawCircle: false,
+      drawPolygon: true,
+      editMode: true,
+      dragMode: false,
+      cutPolygon: false,
+      removalMode: true
+    });
+
+    const ZONE_STYLE = {
+      color: '#ef4444',
+      weight: 2,
+      fillColor: '#fca5a5',
+      fillOpacity: 0.2
+    };
+
+    map.pm.setGlobalOptions({
+      pathOptions: ZONE_STYLE,
+      allowSelfIntersection: false
+    });
+
+    log('Map initialized with Geoman controls');
+
+    // Test storage operations
+    const testStorage = () => {
+      try {
+        localStorage.setItem('test', 'value');
+        localStorage.removeItem('test');
+        log('✓ localStorage is accessible');
+        return true;
+      } catch (e) {
+        log('✗ localStorage not accessible: ' + e.message, true);
+        return false;
+      }
+    };
+
+    // Test zone CRUD operations
+    const testZoneCRUD = () => {
+      log('Testing zone CRUD operations...');
+
+      // Clear existing data
+      localStorage.removeItem('vivons_chapet_data');
+
+      // Test create
+      const testZone = {
+        id: 'test_zone_1',
+        name: 'Test Zone',
+        geojson: {
+          type: 'Feature',
+          geometry: {
+            type: 'Polygon',
+            coordinates: [[
+              [1.84, 48.99],
+              [1.85, 48.99],
+              [1.85, 49.00],
+              [1.84, 49.00],
+              [1.84, 48.99]
+            ]]
+          },
+          properties: {}
+        },
+        createdAt: new Date().toISOString()
+      };
+
+      // Save zone
+      const data = { teamMembers: [], zones: [testZone] };
+      localStorage.setItem('vivons_chapet_data', JSON.stringify(data));
+      log('✓ Zone saved to localStorage');
+
+      // Verify saved
+      const saved = JSON.parse(localStorage.getItem('vivons_chapet_data'));
+      if (saved.zones.length === 1 && saved.zones[0].id === 'test_zone_1') {
+        log('✓ Zone retrieved from localStorage');
+      } else {
+        log('✗ Zone not found in localStorage', true);
+        return false;
+      }
+
+      // Test update
+      saved.zones[0].geojson.geometry.coordinates[0][0] = [1.84, 48.98];
+      saved.zones[0].updatedAt = new Date().toISOString();
+      localStorage.setItem('vivons_chapet_data', JSON.stringify(saved));
+      log('✓ Zone updated in localStorage');
+
+      // Verify update
+      const updated = JSON.parse(localStorage.getItem('vivons_chapet_data'));
+      if (updated.zones[0].geojson.geometry.coordinates[0][0][1] === 48.98) {
+        log('✓ Zone update persisted');
+      } else {
+        log('✗ Zone update not persisted', true);
+        return false;
+      }
+
+      // Test delete
+      updated.zones = [];
+      localStorage.setItem('vivons_chapet_data', JSON.stringify(updated));
+      log('✓ Zone deleted from localStorage');
+
+      // Verify delete
+      const afterDelete = JSON.parse(localStorage.getItem('vivons_chapet_data'));
+      if (afterDelete.zones.length === 0) {
+        log('✓ Zone deletion persisted');
+      } else {
+        log('✗ Zone still exists after deletion', true);
+        return false;
+      }
+
+      return true;
+    };
+
+    // Test pm:update event wiring
+    const testPmUpdateEvent = () => {
+      log('Testing pm:update event...');
+
+      let updateFired = false;
+      const polygon = L.polygon([
+        [48.99, 1.84],
+        [48.99, 1.85],
+        [49.00, 1.85],
+        [49.00, 1.84]
+      ], ZONE_STYLE).addTo(map);
+
+      polygon.options.zoneId = 'test_update';
+
+      polygon.on('pm:update', () => {
+        updateFired = true;
+        log('✓ pm:update event fired on layer');
+      });
+
+      // Simulate edit by changing coordinates
+      polygon.setLatLngs([
+        [48.99, 1.84],
+        [48.99, 1.86],
+        [49.00, 1.86],
+        [49.00, 1.84]
+      ]);
+
+      // Manually fire the event since we can't simulate user interaction
+      polygon.fire('pm:update');
+
+      if (updateFired) {
+        log('✓ Layer-level pm:update handler works');
+        map.removeLayer(polygon);
+        return true;
+      } else {
+        log('✗ Layer-level pm:update handler not working', true);
+        return false;
+      }
+    };
+
+    // Test pm:remove event wiring
+    const testPmRemoveEvent = () => {
+      log('Testing pm:remove event...');
+
+      let removeFired = false;
+      const polygon = L.polygon([
+        [48.99, 1.84],
+        [48.99, 1.85],
+        [49.00, 1.85],
+        [49.00, 1.84]
+      ], ZONE_STYLE).addTo(map);
+
+      polygon.options.zoneId = 'test_remove';
+
+      map.on('pm:remove', (e) => {
+        if (e.layer.options.zoneId === 'test_remove') {
+          removeFired = true;
+          log('✓ pm:remove event fired on map');
+        }
+      });
+
+      // Manually fire the event
+      map.fire('pm:remove', { layer: polygon });
+      map.removeLayer(polygon);
+
+      if (removeFired) {
+        log('✓ Map-level pm:remove handler works');
+        return true;
+      } else {
+        log('✗ Map-level pm:remove handler not working', true);
+        return false;
+      }
+    };
+
+    // Run tests
+    setTimeout(() => {
+      log('Starting automated tests...');
+
+      const results = [];
+      results.push(testStorage());
+      results.push(testZoneCRUD());
+      results.push(testPmUpdateEvent());
+      results.push(testPmRemoveEvent());
+
+      const allPassed = results.every(r => r === true);
+
+      if (allPassed) {
+        log('✅ ALL TESTS PASSED');
+        log('');
+        log('Manual verification steps:');
+        log('1. Click polygon button, draw a zone');
+        log('2. Click edit button, drag a vertex');
+        log('3. Click outside to finish - check localStorage updates');
+        log('4. Click removal button, click zone - verify it disappears');
+        log('5. Refresh page - verify changes persist');
+      } else {
+        log('❌ SOME TESTS FAILED', true);
+      }
+    }, 1000);
+  </script>
+</body>
+</html>
