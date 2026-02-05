@@ -10,29 +10,29 @@ See: .planning/PROJECT.md (updated 2025-02-05)
 ## Current Position
 
 Phase: 2 of 4 (Team Management)
-Plan: 2 of 4 complete
+Plan: 3 of 4 complete
 Status: In progress
-Last activity: 2026-02-05 — Completed 02-02-PLAN.md
+Last activity: 2026-02-05 — Completed 02-03-PLAN.md
 
-Progress: [███████░░░] 75%
+Progress: [████████░░] 80%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 3
-- Average duration: 2.5 min
-- Total execution time: 0.12 hours
+- Total plans completed: 4
+- Average duration: 2.3 min
+- Total execution time: 0.14 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01-foundation | 1/1 | 3.8 min | 3.8 min |
-| 02-team-management | 2/4 | 3.3 min | 1.7 min |
+| 02-team-management | 3/4 | 4.7 min | 1.6 min |
 
 **Recent Trend:**
-- Last 5 plans: 3.8m, 1.8m, 1.5m
-- Trend: Consistent fast execution (infrastructure and services)
+- Last 5 plans: 3.8m, 1.8m, 1.5m, 1.4m
+- Trend: Consistent fast execution (infrastructure, services, UI integration)
 
 *Updated after each plan completion*
 
@@ -56,6 +56,10 @@ Recent decisions affecting current work:
 | Accept multiple CSV field variations | 02-02 | Real-world CSV files have inconsistent headers | Users can import from various sources |
 | Swap GeoJSON [lng, lat] to Leaflet [lat, lng] | 02-02 | Géoplateforme returns GeoJSON format | All geocoded coordinates work with Leaflet |
 | Batch geocoding continues on failures | 02-02 | Don't lose entire batch if one address is bad | Import pipeline handles partial successes |
+| FeatureGroup for marker management | 02-03 | Efficient bulk operations, standard Leaflet pattern | Markers managed as single layer |
+| Event-driven UI synchronization | 02-03 | Decoupled components, single source of truth | Map and panel stay in sync automatically |
+| Inline progress during geocoding | 02-03 | Users need feedback during slow operation | Shows "Géocodage en cours..." message |
+| Reset file input after import | 02-03 | Allow re-importing same file for testing | Better developer/user experience |
 
 ### Pending Todos
 
@@ -68,7 +72,7 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-05
-Stopped at: Completed 02-02-PLAN.md (Data Processing Services)
+Stopped at: Completed 02-03-PLAN.md (UI Integration)
 Resume file: None
 
 ---
