@@ -6,7 +6,9 @@
  */
 
 import Wizard from '@adrii_/wizard-js';
+import L from 'leaflet';
 import { searchCommunesByPostalCode } from '../data/commune.js';
+import { saveCommuneConfig } from '../data/storage.js';
 
 // Module-scoped wizard instance (may be recreated)
 let wizard = null;
@@ -44,6 +46,18 @@ export function initWelcomeWizard() {
 
   // Setup postal code step handler
   setupPostalStep();
+
+  // Setup preview step handler
+  setupPreviewStep();
+
+  // Add dialog close listener for map cleanup
+  dialog.addEventListener('close', () => {
+    const mapContainer = document.getElementById('preview-map');
+    if (mapContainer && mapContainer._leafletMap) {
+      mapContainer._leafletMap.remove();
+      delete mapContainer._leafletMap;
+    }
+  });
 
   // Display wizard modal
   dialog.showModal();
@@ -182,6 +196,128 @@ function renderCommuneSelection(communes, nextButton, resultsContainer) {
       nextButton.disabled = false;
     }
   });
+}
+
+/**
+ * Setup preview step
+ *
+ * Listens for step changes and displays commune boundary preview
+ * when the preview step becomes active.
+ */
+function setupPreviewStep() {
+  const container = document.querySelector('.wizard');
+  const nextButton = document.querySelector('[data-step-name="preview"] .wz-next-button');
+
+  if (!container || !nextButton) {
+    console.error('Preview step elements not found');
+    return;
+  }
+
+  // Listen for Wizard-JS step change events
+  container.addEventListener('wz.update', () => {
+    // Check if we're on the preview step (0-indexed, step 2)
+    if (wizard && wizard.current_step === 2 && selectedCommune) {
+      showCommunePreview(selectedCommune);
+    }
+  });
+
+  // Handle wizard completion on confirm button click
+  nextButton.addEventListener('click', (e) => {
+    e.preventDefault();
+    handleWizardComplete();
+  });
+}
+
+/**
+ * Show commune boundary preview on map
+ *
+ * @param {Object} commune - Commune object with nom and contour
+ */
+function showCommunePreview(commune) {
+  // Update commune name display
+  const nameElement = document.getElementById('preview-commune-name');
+  if (nameElement) {
+    nameElement.textContent = `Commune : ${commune.nom}`;
+  }
+
+  // Get map container
+  const mapContainer = document.getElementById('preview-map');
+  if (!mapContainer) {
+    console.error('Preview map container not found');
+    return;
+  }
+
+  // Cleanup existing map if present
+  if (mapContainer._leafletMap) {
+    mapContainer._leafletMap.remove();
+    delete mapContainer._leafletMap;
+  }
+
+  // Initialize Leaflet map
+  const map = L.map(mapContainer, {
+    zoomControl: true,
+    attributionControl: true
+  });
+
+  // Add OSM tile layer
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors',
+    maxZoom: 19
+  }).addTo(map);
+
+  // Add commune boundary as GeoJSON layer
+  const boundaryLayer = L.geoJSON(commune.contour, {
+    style: {
+      color: '#3388ff',
+      weight: 2,
+      fillOpacity: 0.1
+    }
+  }).addTo(map);
+
+  // Fit map to boundary
+  map.fitBounds(boundaryLayer.getBounds(), { padding: [20, 20] });
+
+  // Store map reference for cleanup
+  mapContainer._leafletMap = map;
+}
+
+/**
+ * Handle wizard completion
+ *
+ * Saves commune config to localStorage and closes the wizard dialog.
+ */
+function handleWizardComplete() {
+  if (!selectedCommune) {
+    console.error('No commune selected');
+    return;
+  }
+
+  // Save commune configuration
+  const result = saveCommuneConfig(selectedCommune);
+
+  if (!result.success) {
+    alert('Erreur lors de la sauvegarde. Veuillez réessayer.');
+    console.error('Save commune config failed:', result.error);
+    return;
+  }
+
+  // Clear wizard state
+  clearWizardState();
+
+  // Close dialog
+  const dialog = document.getElementById('welcome-wizard');
+  if (dialog) {
+    dialog.close();
+  }
+}
+
+/**
+ * Clear wizard state
+ *
+ * Stub function for sessionStorage cleanup if persistence is added later.
+ */
+function clearWizardState() {
+  // TODO: Implement sessionStorage cleanup if persistence added
 }
 
 /**
