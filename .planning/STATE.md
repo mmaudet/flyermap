@@ -9,19 +9,19 @@ See: .planning/PROJECT.md (updated 2026-02-05)
 
 ## Current Position
 
-Phase: Phase 6 - CSV Import in Wizard (2 of 4 v1.1 phases)
-Plan: 02 of 3 complete
-Status: In progress
-Last activity: 2026-02-05 - Completed 06-02-PLAN.md
+Phase: Phase 6 - CSV Import in Wizard (2 of 4 v1.1 phases) COMPLETE
+Plan: 03 of 3 complete
+Status: Phase complete
+Last activity: 2026-02-05 - Completed 06-03-PLAN.md
 
-Progress: [██████████] 100% (14/14 plans complete)
+Progress: [███████████████] 100% (15/15 plans complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 14 (v1.0: 10, v1.1: 4)
+- Total plans completed: 15 (v1.0: 10, v1.1: 5)
 - Average duration: 2.0 min
-- Total execution time: ~28 min
+- Total execution time: ~30 min
 
 **By Phase:**
 
@@ -32,7 +32,7 @@ Progress: [██████████] 100% (14/14 plans complete)
 | 03-zone-creation | 3/3 | 7.2 min | 2.4 min |
 | 04-assignment-system | 3/3 | 7.1 min | 2.4 min |
 | 05-wizard-foundation | 3/3 | 4.0 min | 1.3 min |
-| 06-csv-import-wizard | 2/3 | 3.0 min | 1.5 min |
+| 06-csv-import-wizard | 3/3 | 4.5 min | 1.5 min |
 
 ## Accumulated Context
 
@@ -46,18 +46,19 @@ Progress: [██████████] 100% (14/14 plans complete)
 
 **Rationale:** Natural grouping by feature completion. Each phase delivers complete user-facing capability.
 
-**Phase 06-01 Decisions:**
+**Phase 06 Decisions:**
 - Renamed Step 3 from "Confirmation" to "Apercu" - distinguish commune preview from final confirmation
 - Template uses French column names (nom, adresse, telephone) - matches French UI
-
-**Phase 06-02 Decisions:**
 - Validation triggered on step navigation via wz.btn.next event
 - Preview table limited to 10 rows with overflow indicator
 - escapeHtml helper prevents XSS in user-provided CSV data
+- Geocoding triggers automatically on step 5->6 navigation
+- Team members saved during geocoding, not deferred to completion
+- Rate limiting 20ms between geocode requests
 
 ### Pending Todos
 
-- [ ] Execute Plan 06-03 (Geocoding and wizard completion)
+- [ ] Plan Phase 7 (Reconfiguration)
 
 ### Blockers/Concerns
 
@@ -65,10 +66,10 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-05 12:12 UTC
-Stopped at: Completed 06-02-PLAN.md
+Last session: 2026-02-05 12:14 UTC
+Stopped at: Completed 06-03-PLAN.md (Phase 6 complete)
 Resume file: None
-Next: Plan 06-03 (Geocoding and wizard completion)
+Next: Plan Phase 7 (Reconfiguration)
 
 ---
-*State updated: 2026-02-05 after completing Phase 06 Plan 02*
+*State updated: 2026-02-05 after completing Phase 06 Plan 03*
