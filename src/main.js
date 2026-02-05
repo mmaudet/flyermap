@@ -4,6 +4,7 @@ import './style.css';
 import { CHAPET_CENTER, DEFAULT_ZOOM, MIN_ZOOM, MAX_ZOOM } from './map/config.js';
 import { fetchCommuneBoundary } from './data/commune.js';
 import { initMarkerLayer } from './map/markerLayer.js';
+import { initZoneLayer } from './map/zoneLayer.js';
 import { initSidePanel } from './ui/sidePanel.js';
 import { initImportHandler } from './ui/importFlow.js';
 
@@ -41,3 +42,6 @@ fetchCommuneBoundary()
 initMarkerLayer(map);
 initSidePanel();
 initImportHandler();
+
+// Initialize Phase 3 features
+initZoneLayer(map);
