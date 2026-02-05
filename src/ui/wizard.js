@@ -195,52 +195,57 @@ function setupPreviewStep() {
     return;
   }
 
-  // Listen for Wizard-JS navigation events
-  container.addEventListener('wz.btn.next', async (e) => {
-    // Step 1 -> Step 2 (postal code -> preview): validate commune selection
-    if (wizard && wizard.current_step === 1) {
-      // If no commune selected, try to trigger lookup first
-      if (!selectedCommune) {
-        const input = document.getElementById('postal-code');
-        const resultsContainer = document.getElementById('commune-results');
-        if (input && resultsContainer && /^[0-9]{5}$/.test(input.value.trim())) {
-          // Trigger lookup and wait for it
-          await handlePostalCodeLookup(input, resultsContainer);
-        }
-      }
+  // Track last known step to detect changes
+  let lastStep = 0;
 
-      // Block navigation if still no commune selected
+  // Poll for step changes (Wizard-JS doesn't have a step change event)
+  setInterval(() => {
+    if (!wizard) return;
+
+    const currentStep = wizard.current_step;
+    if (currentStep === lastStep) return;
+
+    const previousStep = lastStep;
+    lastStep = currentStep;
+
+    // Arrived at step 2 (Apercu) - validate commune and show preview
+    if (currentStep === 2) {
       if (!selectedCommune) {
-        e.preventDefault();
-        e.stopPropagation();
+        // No commune selected - show error and go back
         const resultsContainer = document.getElementById('commune-results');
-        if (resultsContainer && !resultsContainer.querySelector('.error')) {
-          resultsContainer.innerHTML = '<p class="error">Veuillez entrer un code postal valide</p>';
+        if (resultsContainer) {
+          resultsContainer.innerHTML = '<p class="error">Veuillez d\'abord rechercher et sélectionner une commune</p>';
         }
+        // Click the prev button to go back
+        setTimeout(() => {
+          const prevBtn = container.querySelector('.wizard-btn.prev');
+          if (prevBtn) prevBtn.click();
+        }, 100);
         return;
       }
-
-      // Commune selected - show preview after transition
-      setTimeout(() => showCommunePreview(selectedCommune), 100);
+      // Show commune preview
+      showCommunePreview(selectedCommune);
     }
 
-    // Check if we're moving from Import step (4) to Validation step (5)
-    // Run validation after the step transition completes
-    if (wizard && wizard.current_step === 4) {
-      setTimeout(() => runValidationStep(), 100);
+    // Arrived at step 5 (Validation) - run CSV validation
+    if (currentStep === 5) {
+      runValidationStep();
     }
 
-    // Check if we're moving from Validation step (5) to Confirmation step (6)
-    // Run geocoding after the step transition completes
-    if (wizard && wizard.current_step === 5) {
-      setTimeout(() => runGeocodingStep(), 100);
+    // Arrived at step 6 (Confirmation) - run geocoding
+    if (currentStep === 6) {
+      runGeocodingStep();
     }
-  });
+  }, 100);
 
-  // Also handle nav clicks
-  container.addEventListener('wz.nav.forward', () => {
-    if (wizard && wizard.current_step === 2 && selectedCommune) {
-      setTimeout(() => showCommunePreview(selectedCommune), 100);
+  // Trigger lookup when clicking next on step 1
+  container.addEventListener('wz.btn.next', async () => {
+    if (wizard && wizard.current_step === 1 && !selectedCommune) {
+      const input = document.getElementById('postal-code');
+      const resultsContainer = document.getElementById('commune-results');
+      if (input && resultsContainer && /^[0-9]{5}$/.test(input.value.trim())) {
+        await handlePostalCodeLookup(input, resultsContainer);
+      }
     }
   });
 }

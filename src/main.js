@@ -16,8 +16,9 @@ import { loadCommuneConfig } from './data/storage.js';
 // Check for commune configuration (first-launch detection)
 const communeConfig = loadCommuneConfig();
 if (!communeConfig) {
-  // First launch - show wizard
+  // First launch - show wizard and wait for completion
   initWelcomeWizard();
+
   // Add event listener to reload page after wizard closes
   const dialog = document.getElementById('welcome-wizard');
   dialog.addEventListener('close', () => {
@@ -26,9 +27,10 @@ if (!communeConfig) {
       window.location.reload(); // Reload to initialize main app with commune
     }
   });
-  // Exit early - don't initialize map until wizard completes
-  throw new Error('Wizard flow active - map initialization deferred');
 }
+
+// Only initialize the app if commune is configured
+if (communeConfig) {
 
 // Initialize Leaflet map
 const map = L.map('map', {
@@ -88,3 +90,4 @@ initExportImport(map);
 
 // Initialize Phase 7 features (reconfiguration)
 initReconfigure();
+} // End of if (communeConfig)
