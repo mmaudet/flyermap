@@ -25,6 +25,7 @@
           Importer JSON
           <input type="file" id="import-file" accept=".json" hidden>
         </label>
+        <button id="reconfigure-btn" class="action-btn btn-reconfigure">Changer de commune</button>
       </div>
     </div>
 
@@ -143,6 +144,25 @@
           </div>
         </div>
       </div>
+    </dialog>
+
+    <dialog id="reconfigure-confirm">
+      <form method="dialog">
+        <h3>Changer de commune ?</h3>
+        <div class="warning-content">
+          <p>Cette action supprimera definitivement :</p>
+          <ul>
+            <li>Tous les colistiers (<span id="member-count">0</span> actuellement)</li>
+            <li>Toutes les zones (<span id="zone-count">0</span> actuellement)</li>
+            <li>Toutes les assignations</li>
+          </ul>
+          <p class="warning"><strong>Cette action est irreversible.</strong></p>
+        </div>
+        <div class="button-row">
+          <button type="submit" value="cancel" class="btn-secondary" autofocus>Annuler</button>
+          <button type="submit" value="confirm" class="btn-danger">Reinitialiser et changer</button>
+        </div>
+      </form>
     </dialog>
 
     <script type="module" src="/src/main.js"></script>
