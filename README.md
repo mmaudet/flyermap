@@ -14,6 +14,8 @@ FlyerMap permet aux coordinateurs de campagne de visualiser et organiser la dist
 - Géocodage automatique des adresses
 - Aperçu du contour de la commune
 
+![Wizard - Sélection de commune](docs/screenshots/wizard-postal-code.png)
+
 ### Gestion de l'équipe
 - Visualisation des colistiers sur la carte avec marqueurs colorés
 - Import/Export CSV des membres de l'équipe
