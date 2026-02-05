@@ -6,6 +6,7 @@
  */
 
 import Wizard from '@adrii_/wizard-js';
+import '@adrii_/wizard-js/dist/wizard.min.css';
 import L from 'leaflet';
 import { searchCommunesByPostalCode } from '../data/commune.js';
 import { saveCommuneConfig } from '../data/storage.js';
@@ -30,6 +31,18 @@ export function initWelcomeWizard() {
     return;
   }
 
+  // Add dialog close listener for map cleanup
+  dialog.addEventListener('close', () => {
+    const mapContainer = document.getElementById('preview-map');
+    if (mapContainer && mapContainer._leafletMap) {
+      mapContainer._leafletMap.remove();
+      delete mapContainer._leafletMap;
+    }
+  });
+
+  // Display wizard modal FIRST (so DOM is accessible)
+  dialog.showModal();
+
   // Create Wizard instance with configuration
   wizard = new Wizard({
     wz_class: '.wizard',           // Container selector
@@ -38,7 +51,7 @@ export function initWelcomeWizard() {
     progressbar: true               // Show progress bar
   });
 
-  // Initialize wizard
+  // Initialize wizard AFTER dialog is shown
   wizard.init();
 
   // Setup welcome step handler
@@ -49,18 +62,6 @@ export function initWelcomeWizard() {
 
   // Setup preview step handler
   setupPreviewStep();
-
-  // Add dialog close listener for map cleanup
-  dialog.addEventListener('close', () => {
-    const mapContainer = document.getElementById('preview-map');
-    if (mapContainer && mapContainer._leafletMap) {
-      mapContainer._leafletMap.remove();
-      delete mapContainer._leafletMap;
-    }
-  });
-
-  // Display wizard modal
-  dialog.showModal();
 }
 
 /**
