@@ -54,7 +54,59 @@ export function initZoneLayer(mapInstance) {
     allowSelfIntersection: false
   });
 
-  // Event handlers will be added in Plan 03-02
+  // Event handlers
+  setupEventHandlers();
 
   return zoneGroup;
+}
+
+/**
+ * Generate unique zone ID
+ * @returns {string} Unique ID
+ */
+function generateZoneId() {
+  return 'zone_' + Date.now().toString(36) + Math.random().toString(36).substr(2);
+}
+
+/**
+ * Setup event handlers for zone creation
+ */
+function setupEventHandlers() {
+  // Handle zone creation
+  map.on('pm:create', (e) => {
+    const layer = e.layer;
+
+    // Only handle polygons
+    if (e.shape !== 'Polygon') return;
+
+    // Add to FeatureGroup
+    zoneGroup.addLayer(layer);
+
+    // Generate ID and default name
+    const zoneId = generateZoneId();
+    const defaultName = `Zone ${store.getZones().length + 1}`;
+
+    // Store ID in layer options
+    layer.options.zoneId = zoneId;
+
+    // Prompt for name (browser prompt for MVP)
+    const name = prompt('Nom de la zone:', defaultName);
+    const finalName = (name && name.trim()) ? name.trim() : defaultName;
+
+    // Apply style to ensure consistency
+    layer.setStyle(ZONE_STYLE);
+
+    // Save to store
+    store.addZone({
+      id: zoneId,
+      name: finalName,
+      geojson: layer.toGeoJSON()
+    });
+
+    // Bind popup with zone name
+    layer.bindPopup(`<strong>${finalName}</strong>`);
+
+    // Store layer reference
+    layersByZoneId.set(zoneId, layer);
+  });
 }
