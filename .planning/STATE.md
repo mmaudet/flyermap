@@ -9,17 +9,17 @@ See: .planning/PROJECT.md (updated 2026-02-05)
 
 ## Current Position
 
-Phase: Not started (defining requirements)
-Plan: —
-Status: Defining requirements
-Last activity: 2026-02-05 — Milestone v1.1 started
+Phase: Phase 5 - Wizard Foundation
+Plan: Not yet planned
+Status: Ready for planning
+Last activity: 2026-02-05 — v1.1 roadmap created
 
-Progress: [░░░░░░░░░░] 0%
+Progress: [░░░░░░░░░░] 0% (0/4 phases complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 10
+- Total plans completed: 10 (v1.0)
 - Average duration: 2.2 min
 - Total execution time: ~22 min
 
@@ -36,11 +36,19 @@ Progress: [░░░░░░░░░░] 0%
 
 ### Decisions
 
-All v1.0 decisions archived in `.planning/milestones/v1.0-ROADMAP.md`
+**v1.1 Phase Structure:**
+- Phase 5: Wizard Foundation (postal code → commune selection)
+- Phase 6: CSV Import in Wizard (format display, upload, validation, geocoding)
+- Phase 7: Reconfiguration (reset button, data loss warnings)
+- Phase 8: Zone Export (OSM streets, PDF/CSV generation)
+
+**Rationale:** Natural grouping by feature completion. Each phase delivers complete user-facing capability.
 
 ### Pending Todos
 
-None - milestone complete.
+- [ ] Plan Phase 5 (Wizard Foundation)
+- [ ] Research Wizard-JS 2.0.3 integration patterns
+- [ ] Research geo.api.gouv.fr postal code lookup
 
 ### Blockers/Concerns
 
@@ -48,9 +56,10 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-05 08:45 UTC
-Stopped at: v1.0 milestone completion
+Last session: 2026-02-05 09:00 UTC
+Stopped at: v1.1 roadmap creation complete
 Resume file: None
+Next: `/gsd:plan-phase 5`
 
 ---
-*State updated: 2026-02-05 after v1.0 milestone completion*
+*State updated: 2026-02-05 after v1.1 roadmap creation*
