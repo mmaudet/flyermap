@@ -7,6 +7,7 @@ import '@geoman-io/leaflet-geoman-free';
 import '@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css';
 import { store, subscribe } from '../state/store.js';
 import { openZoneEditor } from '../ui/zoneEditor.js';
+import { getTeamMemberColor } from '../map/markerStyles.js';
 
 // Module-level variables
 let map = null;
@@ -70,7 +71,43 @@ export function initZoneLayer(mapInstance) {
     loadZonesFromStore();
   });
 
+  // Subscribe to zone update events for style refresh
+  subscribe('zoneUpdated', (zone) => {
+    updateZoneStyle(zone.id);
+  });
+
   return zoneGroup;
+}
+
+/**
+ * Update zone style based on assignment
+ * @param {string} zoneId - Zone ID to update
+ */
+export function updateZoneStyle(zoneId) {
+  const layer = layersByZoneId.get(zoneId);
+  if (!layer) return;
+
+  const zone = store.getZones().find(z => z.id === zoneId);
+  if (!zone) return;
+
+  if (zone.assignedMembers && zone.assignedMembers.length > 0) {
+    // Use first assigned member's color
+    const members = store.getTeamMembers();
+    const memberIndex = members.findIndex(m => m.id === zone.assignedMembers[0]);
+
+    if (memberIndex !== -1) {
+      const color = getTeamMemberColor(memberIndex);
+      layer.setStyle({
+        color: color,
+        fillColor: color,
+        fillOpacity: 0.3,
+        weight: 2
+      });
+    }
+  } else {
+    // Unassigned - red (original style)
+    layer.setStyle(ZONE_STYLE);
+  }
 }
 
 /**
@@ -100,6 +137,9 @@ function loadZonesFromStore() {
 
         // Store reference
         layersByZoneId.set(zone.id, layer);
+
+        // Apply correct style based on assignment
+        updateZoneStyle(zone.id);
 
         // Bind popup
         layer.bindPopup(`<strong>${zone.name}</strong>`);
