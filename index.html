@@ -95,10 +95,51 @@
           </div>
 
           <!-- Step 3: Preview -->
-          <div class="wizard-step" data-wz-title="Confirmation">
+          <div class="wizard-step" data-wz-title="Apercu">
             <h3>Confirmer votre commune</h3>
             <p id="preview-commune-name"></p>
             <div id="preview-map" style="height: 300px; border: 1px solid #ddd; margin: 1rem 0;"></div>
+          </div>
+
+          <!-- Step 4: CSV Format Explanation -->
+          <div class="wizard-step" data-wz-title="Format CSV">
+            <h3>Format du fichier CSV</h3>
+            <p>Votre fichier doit contenir les colonnes suivantes :</p>
+            <ul>
+              <li><strong>nom</strong> ou <strong>name</strong> (obligatoire)</li>
+              <li><strong>adresse</strong> ou <strong>address</strong> (obligatoire)</li>
+              <li><strong>telephone</strong> ou <strong>phone</strong> (optionnel)</li>
+            </ul>
+            <a href="/templates/colistiers-template.csv" download class="btn-secondary">Telecharger le modele</a>
+          </div>
+
+          <!-- Step 5: File Upload -->
+          <div class="wizard-step" data-wz-title="Import">
+            <h3>Importer vos colistiers</h3>
+            <div id="csv-drop-zone" class="drop-zone">
+              <p>Glissez votre fichier CSV ici</p>
+              <p>ou</p>
+              <label class="btn-primary">
+                Parcourir
+                <input type="file" id="wizard-csv-input" accept=".csv" hidden>
+              </label>
+            </div>
+            <div id="csv-file-info" hidden></div>
+          </div>
+
+          <!-- Step 6: Validation Results -->
+          <div class="wizard-step" data-wz-title="Validation">
+            <h3>Validation du fichier</h3>
+            <div id="validation-results">
+              <p>Aucun fichier analyse</p>
+            </div>
+          </div>
+
+          <!-- Step 7: Geocoding & Confirmation -->
+          <div class="wizard-step" data-wz-title="Confirmation">
+            <h3>Generation de la carte</h3>
+            <div id="geocoding-progress"></div>
+            <div id="import-summary" hidden></div>
           </div>
         </div>
       </div>
