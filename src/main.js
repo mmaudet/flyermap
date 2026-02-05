@@ -1,7 +1,7 @@
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import './style.css';
-import { CHAPET_CENTER, DEFAULT_ZOOM, MIN_ZOOM, MAX_ZOOM } from './map/config.js';
+import { DEFAULT_CENTER, DEFAULT_ZOOM, MIN_ZOOM, MAX_ZOOM } from './map/config.js';
 import { fetchCommuneBoundary } from './data/commune.js';
 import { initMarkerLayer } from './map/markerLayer.js';
 import { initZoneLayer } from './map/zoneLayer.js';
@@ -10,9 +10,9 @@ import { initImportHandler } from './ui/importFlow.js';
 import { initZoneEditor } from './ui/zoneEditor.js';
 import { initExportImport } from './ui/exportImport.js';
 
-// Initialize Leaflet map centered on Chapet
+// Initialize Leaflet map
 const map = L.map('map', {
-  center: CHAPET_CENTER,
+  center: DEFAULT_CENTER,
   zoom: DEFAULT_ZOOM,
   minZoom: MIN_ZOOM,
   maxZoom: MAX_ZOOM

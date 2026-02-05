@@ -1,11 +1,11 @@
-import { CHAPET_INSEE } from '../map/config.js';
+import { DEFAULT_INSEE } from '../map/config.js';
 
 /**
- * Fetch Chapet commune boundary from geo.api.gouv.fr
+ * Fetch commune boundary from geo.api.gouv.fr
  * Returns GeoJSON with contour geometry (WGS84/EPSG:4326)
  */
 export async function fetchCommuneBoundary() {
-  const url = `https://geo.api.gouv.fr/communes/${CHAPET_INSEE}?format=geojson&geometry=contour`;
+  const url = `https://geo.api.gouv.fr/communes/${DEFAULT_INSEE}?format=geojson&geometry=contour`;
 
   try {
     const response = await fetch(url);

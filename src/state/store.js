@@ -3,7 +3,7 @@
  */
 import storage from '../data/storage.js';
 
-const STORAGE_KEY = 'vivons_chapet_data';
+const STORAGE_KEY = 'flyermap_data';
 const DEBOUNCE_MS = 500;
 
 /**
