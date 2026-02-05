@@ -92,6 +92,7 @@ Quelle phase couvre quel requirement. Mis à jour lors de la création du roadma
 | TEAM-02 | Phase 2 | Pending |
 | TEAM-03 | Phase 2 | Pending |
 | TEAM-04 | Phase 2 | Pending |
+| DATA-01 | Phase 2 | Pending |
 | ZONE-01 | Phase 3 | Pending |
 | ZONE-02 | Phase 3 | Pending |
 | ZONE-03 | Phase 3 | Pending |
@@ -100,9 +101,8 @@ Quelle phase couvre quel requirement. Mis à jour lors de la création du roadma
 | ASGN-02 | Phase 4 | Pending |
 | ASGN-03 | Phase 4 | Pending |
 | ASGN-04 | Phase 4 | Pending |
-| DATA-01 | Phase 2 | Pending |
-| DATA-02 | Phase 5 | Pending |
-| DATA-03 | Phase 5 | Pending |
+| DATA-02 | Phase 4 | Pending |
+| DATA-03 | Phase 4 | Pending |
 
 **Coverage:**
 - v1 requirements: 18 total
@@ -111,4 +111,4 @@ Quelle phase couvre quel requirement. Mis à jour lors de la création du roadma
 
 ---
 *Requirements defined: 2025-02-05*
-*Last updated: 2025-02-05 after initial definition*
+*Last updated: 2026-02-05 after roadmap creation*
