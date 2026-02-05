@@ -201,6 +201,12 @@ function setupPreviewStep() {
       // Will be on step 2 after this
       setTimeout(() => showCommunePreview(selectedCommune), 100);
     }
+
+    // Check if we're moving from Import step (4) to Validation step (5)
+    // Run validation after the step transition completes
+    if (wizard && wizard.current_step === 4) {
+      setTimeout(() => runValidationStep(), 100);
+    }
   });
 
   // Also handle nav clicks
@@ -270,6 +276,111 @@ function setupUploadStep() {
       handleFileSelected(file);
     }
   });
+}
+
+/**
+ * Escape HTML characters to prevent XSS
+ *
+ * @param {string} str - String to escape
+ * @returns {string} Escaped string
+ */
+function escapeHtml(str) {
+  if (str == null) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+/**
+ * Run validation step - parse and validate CSV
+ *
+ * Parses the selected CSV file, validates fields, and displays
+ * either error messages or a preview table.
+ *
+ * @returns {Promise<boolean>} True if validation passed
+ */
+async function runValidationStep() {
+  const resultsContainer = document.getElementById('validation-results');
+
+  if (!resultsContainer) {
+    console.error('Validation results container not found');
+    return false;
+  }
+
+  // Check if file is selected
+  if (!selectedFile) {
+    resultsContainer.innerHTML = '<div class="error-box"><p class="error">Aucun fichier selectionne. Retournez a l\'etape precedente.</p></div>';
+    return false;
+  }
+
+  // Show loading state
+  resultsContainer.innerHTML = '<p>Analyse en cours...</p>';
+
+  try {
+    // Parse CSV
+    const results = await parseCSV(selectedFile);
+
+    // Check for empty file
+    if (!results || results.length === 0) {
+      resultsContainer.innerHTML = '<div class="error-box"><p class="error">Le fichier est vide ou mal formate</p></div>';
+      return false;
+    }
+
+    // Validate fields
+    const errors = validateTeamMembers(results);
+
+    if (errors.length > 0) {
+      // Build error HTML
+      let html = `<div class="error-box">
+        <p class="error"><strong>${errors.length} erreur(s) trouvee(s)</strong></p>
+        <ul>`;
+      for (const error of errors) {
+        html += `<li>Ligne ${error.row}: ${escapeHtml(error.message)}</li>`;
+      }
+      html += `</ul>
+        <p>Corrigez le fichier et reimportez-le.</p>
+      </div>`;
+      resultsContainer.innerHTML = html;
+      return false;
+    }
+
+    // Normalize and store validated members
+    validatedMembers = results.map(normalizeTeamMember);
+
+    // Build preview HTML
+    let html = `<p class="success"><strong>${validatedMembers.length} colistier(s) valide(s)</strong></p>
+      <div class="preview-scroll">
+        <table class="preview-table">
+          <thead>
+            <tr><th>Nom</th><th>Adresse</th><th>Telephone</th></tr>
+          </thead>
+          <tbody>`;
+
+    const maxRows = Math.min(validatedMembers.length, 10);
+    for (let i = 0; i < maxRows; i++) {
+      const m = validatedMembers[i];
+      html += `<tr>
+        <td>${escapeHtml(m.name)}</td>
+        <td>${escapeHtml(m.address)}</td>
+        <td>${escapeHtml(m.phone || '-')}</td>
+      </tr>`;
+    }
+
+    if (validatedMembers.length > 10) {
+      html += `<tr><td colspan="3" class="more">... et ${validatedMembers.length - 10} autre(s)</td></tr>`;
+    }
+
+    html += `</tbody></table></div>`;
+    resultsContainer.innerHTML = html;
+    return true;
+
+  } catch (error) {
+    console.error('CSV parse error:', error);
+    resultsContainer.innerHTML = '<div class="error-box"><p class="error">Erreur lors de l\'analyse du fichier CSV</p></div>';
+    return false;
+  }
 }
 
 /**
