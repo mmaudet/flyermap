@@ -415,3 +415,96 @@ dialog#zone-editor h3 {
     flex-direction: column;
   }
 }
+
+/* Wizard CSV Import Styles */
+
+.drop-zone {
+  border: 2px dashed #d1d5db;
+  border-radius: 8px;
+  padding: 40px 20px;
+  text-align: center;
+  background: #f9fafb;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.drop-zone.drag-over {
+  border-color: #2563eb;
+  background: #eff6ff;
+}
+
+.drop-zone p {
+  margin: 8px 0;
+  color: #6b7280;
+}
+
+/* Validation results */
+.error-box {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 4px;
+  padding: 12px;
+  margin: 12px 0;
+}
+
+.error-box ul {
+  margin: 8px 0 0 0;
+  padding-left: 20px;
+}
+
+.error-box li {
+  color: #dc2626;
+  font-size: 14px;
+}
+
+.success {
+  color: #059669;
+}
+
+.error {
+  color: #dc2626;
+}
+
+.warning {
+  color: #d97706;
+}
+
+/* Preview table */
+.preview-scroll {
+  max-height: 200px;
+  overflow-y: auto;
+  margin: 12px 0;
+}
+
+.preview-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.preview-table th,
+.preview-table td {
+  padding: 6px 8px;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.preview-table th {
+  background: #f3f4f6;
+  font-weight: 600;
+}
+
+.preview-table .more {
+  text-align: center;
+  color: #6b7280;
+  font-style: italic;
+}
+
+/* File info display */
+#csv-file-info {
+  margin-top: 16px;
+  padding: 12px;
+  background: #f0fdf4;
+  border-radius: 4px;
+  border: 1px solid #bbf7d0;
+}
