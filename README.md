@@ -1,6 +1,6 @@
 # FlyerMap
 
-**Application de gestion cartographique pour la distribution de tracts électoraux**
+**Application ergonomique (mais sans prétention) de gestion cartographique pour la distribution de tracts électoraux.**
 
 ![FlyerMap - Vue principale](docs/screenshots/flyermap-main.png)
 
@@ -10,7 +10,7 @@ FlyerMap permet aux coordinateurs de campagne de visualiser et organiser la dist
 
 ### Configuration initiale (Wizard)
 - Sélection de la commune par code postal
-- Import des colistiers via fichier CSV
+- Import des colistiers via fichier CSV avec template à télécharger depuis l'application
 - Géocodage automatique des adresses
 - Aperçu du contour de la commune
 
