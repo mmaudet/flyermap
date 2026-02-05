@@ -11,7 +11,7 @@
 
 **Goal:** Rendre l'application générique (wizard onboarding pour choisir la commune) et permettre l'export de fiches par zone avec rues OSM.
 
-**Status:** Planning
+**Status:** In Progress
 **Depth:** Quick (4 phases)
 **Coverage:** 18/18 requirements mapped
 
@@ -38,9 +38,9 @@
 **Plans:** 3 plans
 
 Plans:
-- [ ] 05-01-PLAN.md — Wizard-JS setup with welcome screen and progress stepper
-- [ ] 05-02-PLAN.md — Postal code lookup and multi-commune selection
-- [ ] 05-03-PLAN.md — Boundary preview, first-launch detection, and completion flow
+- [x] 05-01-PLAN.md — Wizard-JS setup with welcome screen and progress stepper
+- [x] 05-02-PLAN.md — Postal code lookup and multi-commune selection
+- [x] 05-03-PLAN.md — Boundary preview, first-launch detection, and completion flow
 
 ---
 
@@ -122,7 +122,7 @@ Plans:
 | 2. Team Management | v1.0 | 3/3 | Complete | 2026-02-05 |
 | 3. Zone Creation | v1.0 | 3/3 | Complete | 2026-02-05 |
 | 4. Assignment System | v1.0 | 3/3 | Complete | 2026-02-05 |
-| 5. Wizard Foundation | v1.1 | 0/3 | Ready | — |
+| 5. Wizard Foundation | v1.1 | 3/3 | Complete | 2026-02-05 |
 | 6. CSV Import in Wizard | v1.1 | 0/TBD | Pending | — |
 | 7. Reconfiguration | v1.1 | 0/TBD | Pending | — |
 | 8. Zone Export | v1.1 | 0/TBD | Pending | — |
@@ -147,9 +147,9 @@ See [v1.0 Archive](milestones/v1.0-ROADMAP.md) for full details.
 
 ## Next Steps
 
-To start Phase 5:
+To start Phase 6:
 ```
-/gsd:execute-phase 5
+/gsd:plan-phase 6
 ```
 
 ---
