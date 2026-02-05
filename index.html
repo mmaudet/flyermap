@@ -7,6 +7,18 @@
   </head>
   <body>
     <div id="map"></div>
+    <div id="side-panel" class="side-panel">
+      <div class="panel-header">
+        <h2>Équipe</h2>
+        <label class="import-btn">
+          Importer CSV
+          <input type="file" id="csv-import" accept=".csv" hidden>
+        </label>
+      </div>
+      <div id="team-list" class="team-list">
+        <p class="empty-message">Aucun colistier importé</p>
+      </div>
+    </div>
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>
