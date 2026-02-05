@@ -9,19 +9,19 @@ See: .planning/PROJECT.md (updated 2026-02-05)
 
 ## Current Position
 
-Phase: Phase 5 - Wizard Foundation
-Plan: Not yet planned
-Status: Ready for planning
-Last activity: 2026-02-05 — v1.1 roadmap created
+Phase: Phase 5 - Wizard Foundation (1 of 4 v1.1 phases)
+Plan: 01 of 3 complete
+Status: In progress
+Last activity: 2026-02-05 — Completed 05-01-PLAN.md
 
-Progress: [░░░░░░░░░░] 0% (0/4 phases complete)
+Progress: [████████░░] 84% (11/13 plans complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 10 (v1.0)
-- Average duration: 2.2 min
-- Total execution time: ~22 min
+- Total plans completed: 11 (v1.0: 10, v1.1: 1)
+- Average duration: 2.1 min
+- Total execution time: ~23 min
 
 **By Phase:**
 
@@ -31,6 +31,7 @@ Progress: [░░░░░░░░░░] 0% (0/4 phases complete)
 | 02-team-management | 3/3 | 5.1 min | 1.7 min |
 | 03-zone-creation | 3/3 | 7.2 min | 2.4 min |
 | 04-assignment-system | 3/3 | 7.1 min | 2.4 min |
+| 05-wizard-foundation | 1/3 | 1.0 min | 1.0 min |
 
 ## Accumulated Context
 
@@ -44,11 +45,17 @@ Progress: [░░░░░░░░░░] 0% (0/4 phases complete)
 
 **Rationale:** Natural grouping by feature completion. Each phase delivers complete user-facing capability.
 
+**Phase 05-01 Decisions:**
+- Use npm package for Wizard-JS (not CDN) — consistency with Vite build
+- Native <dialog> element for modal — follows zoneEditor pattern
+- Dots navigation style — best for 3-step linear flow
+- Custom buttons per step — different text/actions per step needed
+
 ### Pending Todos
 
-- [ ] Plan Phase 5 (Wizard Foundation)
-- [ ] Research Wizard-JS 2.0.3 integration patterns
-- [ ] Research geo.api.gouv.fr postal code lookup
+- [x] Plan Phase 5 (Wizard Foundation) — Complete
+- [x] Research Wizard-JS 2.0.3 integration patterns — Complete
+- [ ] Research geo.api.gouv.fr postal code lookup (for Plan 05-02)
 
 ### Blockers/Concerns
 
@@ -56,10 +63,10 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-05 09:00 UTC
-Stopped at: v1.1 roadmap creation complete
+Last session: 2026-02-05 09:23 UTC
+Stopped at: Completed 05-01-PLAN.md
 Resume file: None
-Next: `/gsd:plan-phase 5`
+Next: Plan 05-02 (Postal Code Input)
 
 ---
-*State updated: 2026-02-05 after v1.1 roadmap creation*
+*State updated: 2026-02-05 after completing Phase 05 Plan 01*
