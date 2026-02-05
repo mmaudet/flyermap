@@ -6,7 +6,7 @@
  */
 
 import Wizard from '@adrii_/wizard-js';
-import '@adrii_/wizard-js/dist/wizard.min.css';
+import '@adrii_/wizard-js/style.css';
 import L from 'leaflet';
 import { searchCommunesByPostalCode } from '../data/commune.js';
 import { saveCommuneConfig } from '../data/storage.js';
