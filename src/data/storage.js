@@ -98,4 +98,26 @@ class Storage {
 }
 
 // Export singleton instance
-export default new Storage();
+const storage = new Storage();
+export default storage;
+
+/**
+ * Save commune configuration to localStorage
+ * @param {Object} commune - Commune object with code, nom, contour
+ * @returns {Object} Result with success boolean and optional error
+ */
+export function saveCommuneConfig(commune) {
+  return storage.save('flyermap_commune', {
+    code: commune.code,
+    nom: commune.nom,
+    contour: commune.contour
+  });
+}
+
+/**
+ * Load commune configuration from localStorage
+ * @returns {Object|null} Commune config or null if not found
+ */
+export function loadCommuneConfig() {
+  return storage.load('flyermap_commune');
+}
