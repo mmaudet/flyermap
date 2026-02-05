@@ -35,7 +35,12 @@
 4. User sees commune boundary preview on map before confirming
 5. Stepper shows progress through wizard steps
 
-**Plans:** 0/TBD
+**Plans:** 3 plans
+
+Plans:
+- [ ] 05-01-PLAN.md — Wizard-JS setup with welcome screen and progress stepper
+- [ ] 05-02-PLAN.md — Postal code lookup and multi-commune selection
+- [ ] 05-03-PLAN.md — Boundary preview, first-launch detection, and completion flow
 
 ---
 
@@ -117,7 +122,7 @@
 | 2. Team Management | v1.0 | 3/3 | Complete | 2026-02-05 |
 | 3. Zone Creation | v1.0 | 3/3 | Complete | 2026-02-05 |
 | 4. Assignment System | v1.0 | 3/3 | Complete | 2026-02-05 |
-| 5. Wizard Foundation | v1.1 | 0/TBD | Pending | — |
+| 5. Wizard Foundation | v1.1 | 0/3 | Ready | — |
 | 6. CSV Import in Wizard | v1.1 | 0/TBD | Pending | — |
 | 7. Reconfiguration | v1.1 | 0/TBD | Pending | — |
 | 8. Zone Export | v1.1 | 0/TBD | Pending | — |
@@ -144,8 +149,8 @@ See [v1.0 Archive](milestones/v1.0-ROADMAP.md) for full details.
 
 To start Phase 5:
 ```
-/gsd:plan-phase 5
+/gsd:execute-phase 5
 ```
 
 ---
-*Roadmap updated: 2026-02-05 after v1.1 roadmap creation*
+*Roadmap updated: 2026-02-05 after Phase 5 planning*
