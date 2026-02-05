@@ -27,10 +27,10 @@ Decimal phases appear between their surrounding integers in numeric order.
   1. User can see an interactive map centered on Chapet (78130) with zoom and pan controls
   2. Chapet commune boundary displays as a visible polygon on the map
   3. Street names are visible on the map tiles for orientation
-**Plans**: TBD
+**Plans**: 1 plan
 
 Plans:
-- [ ] TBD (planned during phase planning)
+- [ ] 01-01-PLAN.md — Vite + Leaflet map with Chapet commune boundary
 
 ### Phase 2: Team Management
 **Goal**: Team members appear on map with persistent storage
@@ -85,7 +85,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/TBD | Not started | - |
+| 1. Foundation | 0/1 | Planned | - |
 | 2. Team Management | 0/TBD | Not started | - |
 | 3. Zone Creation | 0/TBD | Not started | - |
 | 4. Assignment System | 0/TBD | Not started | - |
