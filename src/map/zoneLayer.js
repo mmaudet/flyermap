@@ -62,6 +62,11 @@ export function initZoneLayer(mapInstance) {
   // Load existing zones
   loadZonesFromStore();
 
+  // Bring zones to front after a short delay to ensure they're above other layers
+  setTimeout(() => {
+    zoneGroup.bringToFront();
+  }, 1000);
+
   // Subscribe to zone reload events
   subscribe('zonesLoaded', () => {
     // Clear existing layers
@@ -111,56 +116,51 @@ export function updateZoneStyle(zoneId) {
 }
 
 /**
- * Generate unique zone ID
- * @returns {string} Unique ID
- */
-function generateZoneId() {
-  return 'zone_' + Date.now().toString(36) + Math.random().toString(36).substr(2);
-}
-
-/**
  * Load zones from store and add to map
  */
 function loadZonesFromStore() {
   const zones = store.getZones();
 
   zones.forEach(zone => {
-    // Create layer from GeoJSON
-    const geoJSONLayer = L.geoJSON(zone.geojson, {
-      style: ZONE_STYLE,
-      onEachFeature: (feature, layer) => {
-        // Store zone ID in layer
-        layer.options.zoneId = zone.id;
+    // Extract coordinates from GeoJSON and convert to Leaflet format
+    // GeoJSON uses [lng, lat], Leaflet uses [lat, lng]
+    const coords = zone.geojson.geometry.coordinates[0].map(coord => [coord[1], coord[0]]);
 
-        // Add to FeatureGroup
-        zoneGroup.addLayer(layer);
+    // Create polygon directly (more reliable for click events)
+    const layer = L.polygon(coords, {
+      ...ZONE_STYLE,
+      zoneId: zone.id,
+      interactive: true,
+      bubblingMouseEvents: false
+    });
 
-        // Store reference
-        layersByZoneId.set(zone.id, layer);
+    // Add to FeatureGroup
+    zoneGroup.addLayer(layer);
 
-        // Apply correct style based on assignment
-        updateZoneStyle(zone.id);
+    // Store reference
+    layersByZoneId.set(zone.id, layer);
 
-        // Bind click event to open editor (no popup - editor is better UX)
-        layer.on('click', (e) => {
-          // Don't open editor if we're in edit mode
-          if (map.pm.globalEditModeEnabled() || map.pm.globalRemovalModeEnabled()) {
-            return;
-          }
-          L.DomEvent.stopPropagation(e);
-          const currentZone = store.getZones().find(z => z.id === zone.id);
-          if (currentZone) {
-            openZoneEditor(currentZone);
-          }
-        });
+    // Apply correct style based on assignment
+    updateZoneStyle(zone.id);
 
-        // Bind edit event
-        layer.on('pm:update', () => {
-          store.updateZone(zone.id, {
-            geojson: layer.toGeoJSON()
-          });
-        });
+    // Bind click event to open editor
+    layer.on('click', (e) => {
+      // Don't open editor if we're in edit mode
+      if (map.pm.globalEditModeEnabled() || map.pm.globalRemovalModeEnabled()) {
+        return;
       }
+      L.DomEvent.stopPropagation(e);
+      const currentZone = store.getZones().find(z => z.id === zone.id);
+      if (currentZone) {
+        openZoneEditor(currentZone);
+      }
+    });
+
+    // Bind edit event for Geoman
+    layer.on('pm:update', () => {
+      store.updateZone(zone.id, {
+        geojson: layer.toGeoJSON()
+      });
     });
   });
 }
@@ -171,39 +171,49 @@ function loadZonesFromStore() {
 function setupEventHandlers() {
   // Handle zone creation
   map.on('pm:create', (e) => {
-    const layer = e.layer;
+    const geomanLayer = e.layer;
 
     // Only handle polygons
     if (e.shape !== 'Polygon') return;
 
-    // Add to FeatureGroup
-    zoneGroup.addLayer(layer);
-
-    // Generate ID and default name
-    const zoneId = generateZoneId();
+    // Default name
     const defaultName = `Zone ${store.getZones().length + 1}`;
-
-    // Store ID in layer options
-    layer.options.zoneId = zoneId;
 
     // Prompt for name (browser prompt for MVP)
     const name = prompt('Nom de la zone:', defaultName);
     const finalName = (name && name.trim()) ? name.trim() : defaultName;
 
-    // Apply style to ensure consistency
-    layer.setStyle(ZONE_STYLE);
+    // Get coordinates from Geoman layer
+    const coords = geomanLayer.getLatLngs()[0];
 
-    // Save to store
-    store.addZone({
-      id: zoneId,
-      name: finalName,
-      geojson: layer.toGeoJSON()
+    // Remove Geoman layer from map (it was auto-added)
+    map.removeLayer(geomanLayer);
+
+    // Create our own polygon with proper options (zoneId will be set after store.addZone)
+    const layer = L.polygon(coords, {
+      ...ZONE_STYLE,
+      interactive: true,
+      bubblingMouseEvents: false
     });
 
-    // Bind click event to open editor (no popup - editor is better UX)
+    // Add to FeatureGroup
+    zoneGroup.addLayer(layer);
+
+    // Save to store - use the returned zone to get the actual ID
+    const geojson = layer.toGeoJSON();
+    const savedZone = store.addZone({
+      name: finalName,
+      geojson: geojson
+    });
+    const zoneId = savedZone.id;
+
+    // Now set the zoneId in layer options
+    layer.options.zoneId = zoneId;
+
+    // Bind click event to open editor
     layer.on('click', (e) => {
-      // Don't open editor if we're in edit mode
-      if (map.pm.globalEditModeEnabled() || map.pm.globalRemovalModeEnabled()) {
+      // Don't open editor if we're in edit or draw mode
+      if (map.pm.globalEditModeEnabled() || map.pm.globalRemovalModeEnabled() || map.pm.globalDrawModeEnabled()) {
         return;
       }
       L.DomEvent.stopPropagation(e);
@@ -222,6 +232,9 @@ function setupEventHandlers() {
 
     // Store layer reference
     layersByZoneId.set(zoneId, layer);
+
+    // Bring zones to front after adding new zone
+    zoneGroup.bringToFront();
   });
 
   // Handle zone editing

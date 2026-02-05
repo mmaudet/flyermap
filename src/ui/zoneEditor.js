@@ -62,7 +62,7 @@ export function initZoneEditor() {
  */
 export function openZoneEditor(zone) {
   if (!dialog) {
-    console.error('Zone editor not initialized');
+    console.error('Zone editor not initialized - dialog is null');
     return;
   }
 
