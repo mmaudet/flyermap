@@ -22,10 +22,10 @@ Requirements pour la version initiale. Chaque requirement est mappé aux phases 
 
 ### Zones
 
-- [ ] **ZONE-01**: Dessiner des polygones pour définir des zones de distribution (Leaflet-Geoman)
-- [ ] **ZONE-02**: Modifier les zones existantes (déplacer les sommets, ajuster la forme)
-- [ ] **ZONE-03**: Supprimer des zones de la carte
-- [ ] **ZONE-04**: Nommer chaque zone (ex: "Zone Nord", "Quartier Gare")
+- [x] **ZONE-01**: Dessiner des polygones pour définir des zones de distribution (Leaflet-Geoman) ✓
+- [x] **ZONE-02**: Modifier les zones existantes (déplacer les sommets, ajuster la forme) ✓
+- [x] **ZONE-03**: Supprimer des zones de la carte ✓
+- [x] **ZONE-04**: Nommer chaque zone (ex: "Zone Nord", "Quartier Gare") ✓
 
 ### Assignation
 
@@ -93,10 +93,10 @@ Quelle phase couvre quel requirement. Mis à jour lors de la création du roadma
 | TEAM-03 | Phase 2 | Complete |
 | TEAM-04 | Phase 2 | Complete |
 | DATA-01 | Phase 2 | Complete |
-| ZONE-01 | Phase 3 | Pending |
-| ZONE-02 | Phase 3 | Pending |
-| ZONE-03 | Phase 3 | Pending |
-| ZONE-04 | Phase 3 | Pending |
+| ZONE-01 | Phase 3 | Complete |
+| ZONE-02 | Phase 3 | Complete |
+| ZONE-03 | Phase 3 | Complete |
+| ZONE-04 | Phase 3 | Complete |
 | ASGN-01 | Phase 4 | Pending |
 | ASGN-02 | Phase 4 | Pending |
 | ASGN-03 | Phase 4 | Pending |
@@ -111,4 +111,4 @@ Quelle phase couvre quel requirement. Mis à jour lors de la création du roadma
 
 ---
 *Requirements defined: 2025-02-05*
-*Last updated: 2026-02-05 after Phase 2 completion*
+*Last updated: 2026-02-05 after Phase 3 completion*

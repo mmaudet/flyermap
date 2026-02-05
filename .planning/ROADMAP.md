@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Foundation** - Interactive map with commune boundaries ✓
 - [x] **Phase 2: Team Management** - Geocoded team markers with persistence ✓
-- [ ] **Phase 3: Zone Creation** - Polygon drawing and editing
+- [x] **Phase 3: Zone Creation** - Polygon drawing and editing ✓
 - [ ] **Phase 4: Assignment System** - Connect team to zones with export
 
 ## Phase Details
@@ -59,10 +59,12 @@ Plans:
   3. User can delete zones from the map
   4. User can name each zone (e.g., "Zone Nord", "Quartier Gare")
   5. Zones persist across sessions
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] TBD (planned during phase planning)
+- [x] 03-01-PLAN.md — Install Leaflet-Geoman, extend store with zone CRUD ✓
+- [x] 03-02-PLAN.md — Zone creation with naming and persistence ✓
+- [x] 03-03-PLAN.md — Zone editing and deletion ✓
 
 ### Phase 4: Assignment System
 **Goal**: Team members are assigned to zones with visual feedback and data export
@@ -89,7 +91,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 |-------|----------------|--------|-----------|
 | 1. Foundation | 1/1 | Complete ✓ | 2026-02-05 |
 | 2. Team Management | 3/3 | Complete ✓ | 2026-02-05 |
-| 3. Zone Creation | 0/TBD | Not started | - |
+| 3. Zone Creation | 3/3 | Complete ✓ | 2026-02-05 |
 | 4. Assignment System | 0/TBD | Not started | - |
 
 ---
