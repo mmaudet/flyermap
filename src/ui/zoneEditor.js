@@ -3,6 +3,7 @@
  * Handles team assignment, zone naming, and metadata editing
  */
 import { store } from '../state/store.js';
+import { updateZoneStyle } from '../map/zoneLayer.js';
 
 let dialog = null;
 
@@ -44,6 +45,9 @@ export function initZoneEditor() {
         mailboxCount: mailboxCount ? parseInt(mailboxCount, 10) : null,
         notes: notes || ''
       });
+
+      // Update visual style immediately
+      updateZoneStyle(zoneId);
 
       // Clear form and close dialog
       form.reset();
