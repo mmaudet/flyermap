@@ -8,6 +8,7 @@ import { initZoneLayer } from './map/zoneLayer.js';
 import { initSidePanel } from './ui/sidePanel.js';
 import { initImportHandler } from './ui/importFlow.js';
 import { initZoneEditor } from './ui/zoneEditor.js';
+import { initExportImport } from './ui/exportImport.js';
 
 // Initialize Leaflet map centered on Chapet
 const map = L.map('map', {
@@ -49,3 +50,4 @@ initZoneLayer(map);
 
 // Initialize Phase 4 features
 initZoneEditor();
+initExportImport();
