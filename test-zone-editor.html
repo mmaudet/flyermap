@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Zone Editor - Vivons Chapet</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    h1 {
+      color: #111827;
+      border-bottom: 2px solid #2563eb;
+      padding-bottom: 10px;
+    }
+    h2 {
+      color: #374151;
+      margin-top: 30px;
+    }
+    .test-step {
+      background: #f9fafb;
+      border-left: 4px solid #2563eb;
+      padding: 15px;
+      margin: 15px 0;
+    }
+    .test-step h3 {
+      margin: 0 0 10px 0;
+      color: #2563eb;
+    }
+    .test-step ol {
+      margin: 10px 0;
+      padding-left: 20px;
+    }
+    .test-step li {
+      margin: 5px 0;
+    }
+    code {
+      background: #1f2937;
+      color: #10b981;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'Monaco', 'Courier New', monospace;
+      font-size: 0.9em;
+    }
+    .console-test {
+      background: #1f2937;
+      color: #e5e7eb;
+      padding: 15px;
+      border-radius: 6px;
+      margin: 15px 0;
+      font-family: 'Monaco', 'Courier New', monospace;
+      font-size: 14px;
+      overflow-x: auto;
+    }
+    .expected {
+      color: #10b981;
+    }
+    .checklist {
+      background: #fef3c7;
+      border-left: 4px solid #f59e0b;
+      padding: 15px;
+      margin: 15px 0;
+    }
+    .checklist h3 {
+      margin: 0 0 10px 0;
+      color: #92400e;
+    }
+    .checklist input[type="checkbox"] {
+      margin-right: 8px;
+    }
+    .checklist label {
+      display: block;
+      margin: 8px 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>Zone Editor Test Harness</h1>
+
+  <p>This document provides manual verification steps for the zone editor dialog component implemented in Phase 4, Plan 01.</p>
+
+  <h2>Prerequisites</h2>
+  <ol>
+    <li>Development server running: <code>npm run dev</code></li>
+    <li>CSV file with team members (use sample from Phase 2)</li>
+  </ol>
+
+  <h2>Test Scenario: Complete Assignment Flow</h2>
+
+  <div class="test-step">
+    <h3>Step 1: Import Team Members</h3>
+    <ol>
+      <li>Open the application in your browser</li>
+      <li>Click "Importer CSV" button in the side panel</li>
+      <li>Select a CSV file with team members (minimum 3 members for testing)</li>
+      <li>Verify team members appear in the side panel</li>
+      <li>Verify markers appear on the map</li>
+    </ol>
+  </div>
+
+  <div class="test-step">
+    <h3>Step 2: Create a Zone</h3>
+    <ol>
+      <li>Click the polygon drawing tool (pentagon icon) in the top-left</li>
+      <li>Draw a zone by clicking to place vertices (minimum 3 points)</li>
+      <li>Click on the first vertex to close the polygon</li>
+      <li>Enter a zone name in the browser prompt (e.g., "Centre Ville")</li>
+      <li>Verify the zone appears on the map with red border</li>
+      <li>Verify zone name appears in popup when hovering</li>
+    </ol>
+  </div>
+
+  <div class="test-step">
+    <h3>Step 3: Open Zone Editor</h3>
+    <ol>
+      <li>Click directly on the zone polygon</li>
+      <li>Verify the zone editor dialog opens as a modal</li>
+      <li>Verify the dialog shows:
+        <ul>
+          <li>Zone name field (pre-filled with current name)</li>
+          <li>Team member multi-select (populated with all members)</li>
+          <li>Mailbox count field (empty)</li>
+          <li>Notes textarea (empty)</li>
+          <li>Cancel and Save buttons</li>
+        </ul>
+      </li>
+    </ol>
+  </div>
+
+  <div class="test-step">
+    <h3>Step 4: Assign Team Members (Multi-Select)</h3>
+    <ol>
+      <li>In the "Membres assignés" select box, hold Ctrl (Windows/Linux) or Cmd (Mac)</li>
+      <li>Click on 2-3 team members to select them</li>
+      <li>Verify multiple members are highlighted</li>
+      <li>Note: The helper text should indicate the multi-select keyboard shortcut</li>
+    </ol>
+  </div>
+
+  <div class="test-step">
+    <h3>Step 5: Fill Metadata</h3>
+    <ol>
+      <li>Enter a mailbox count (e.g., <code>150</code>)</li>
+      <li>Add notes in the textarea (e.g., <code>Quartier pavillonnaire - distribution le mercredi</code>)</li>
+      <li>Optionally change the zone name</li>
+    </ol>
+  </div>
+
+  <div class="test-step">
+    <h3>Step 6: Save and Verify</h3>
+    <ol>
+      <li>Click the "Enregistrer" button</li>
+      <li>Verify the dialog closes</li>
+      <li>Verify the zone is still visible on the map</li>
+      <li>If you changed the name, verify the popup shows the new name</li>
+    </ol>
+  </div>
+
+  <div class="test-step">
+    <h3>Step 7: Re-open and Verify Retention</h3>
+    <ol>
+      <li>Click the zone again to re-open the editor</li>
+      <li>Verify all fields show the previously saved values:
+        <ul>
+          <li>Zone name matches</li>
+          <li>Assigned members are selected (highlighted in the multi-select)</li>
+          <li>Mailbox count is filled</li>
+          <li>Notes are filled</li>
+        </ul>
+      </li>
+      <li>Click "Annuler" to close without changes</li>
+    </ol>
+  </div>
+
+  <div class="test-step">
+    <h3>Step 8: Verify Persistence (Page Refresh)</h3>
+    <ol>
+      <li>Refresh the browser page (F5 or Cmd+R)</li>
+      <li>Wait for the page to reload</li>
+      <li>Verify the zone appears on the map</li>
+      <li>Click the zone to open the editor</li>
+      <li>Verify all data persisted:
+        <ul>
+          <li>Zone name</li>
+          <li>Assigned members (still selected)</li>
+          <li>Mailbox count</li>
+          <li>Notes</li>
+        </ul>
+      </li>
+    </ol>
+  </div>
+
+  <h2>Console Verification</h2>
+
+  <p>Open browser DevTools (F12) and run the following commands to inspect localStorage:</p>
+
+  <div class="console-test">
+// Check localStorage structure<br>
+<span class="expected">const data = JSON.parse(localStorage.getItem('vivons_chapet_data'));</span><br>
+<span class="expected">console.log(data);</span><br>
+<br>
+// Expected output includes:<br>
+// - teamMembers: array of team member objects<br>
+// - zones: array with your created zone<br>
+<br>
+// Inspect zone data<br>
+<span class="expected">console.log(data.zones[0]);</span><br>
+<br>
+// Expected fields in zone object:<br>
+// {<br>
+//   id: "zone_...",<br>
+//   name: "Centre Ville",<br>
+//   geojson: {...},<br>
+//   assignedMembers: ["member-id-1", "member-id-2"],<br>
+//   mailboxCount: 150,<br>
+//   notes: "Quartier pavillonnaire...",<br>
+//   createdAt: "2026-02-05T...",<br>
+//   updatedAt: "2026-02-05T..."<br>
+// }<br>
+  </div>
+
+  <h2>Test Checklist</h2>
+
+  <div class="checklist">
+    <h3>Verification Checklist</h3>
+    <label><input type="checkbox"> Zone editor dialog opens when clicking a zone</label>
+    <label><input type="checkbox"> Dialog shows all form fields (name, members, mailbox count, notes)</label>
+    <label><input type="checkbox"> Multi-select allows selecting multiple team members (Ctrl/Cmd+click)</label>
+    <label><input type="checkbox"> Save button updates zone data in store</label>
+    <label><input type="checkbox"> Cancel button closes dialog without saving changes</label>
+    <label><input type="checkbox"> Re-opening editor shows previously saved values</label>
+    <label><input type="checkbox"> All zone data persists after page refresh</label>
+    <label><input type="checkbox"> Assigned members array correctly stored in localStorage</label>
+    <label><input type="checkbox"> Mailbox count correctly stored as integer</label>
+    <label><input type="checkbox"> Notes correctly stored as string</label>
+    <label><input type="checkbox"> Zone popup still shows zone name after editing</label>
+  </div>
+
+  <h2>Edge Cases to Test</h2>
+
+  <div class="test-step">
+    <h3>Cancel Button Behavior</h3>
+    <ol>
+      <li>Open a zone editor</li>
+      <li>Make changes to multiple fields</li>
+      <li>Click "Annuler"</li>
+      <li>Re-open the editor</li>
+      <li>Verify no changes were saved</li>
+    </ol>
+  </div>
+
+  <div class="test-step">
+    <h3>Empty Fields</h3>
+    <ol>
+      <li>Open a zone editor</li>
+      <li>Leave mailbox count empty</li>
+      <li>Leave notes empty</li>
+      <li>Assign no team members (deselect all)</li>
+      <li>Save and verify no errors occur</li>
+    </ol>
+  </div>
+
+  <div class="test-step">
+    <h3>Multiple Zones</h3>
+    <ol>
+      <li>Create 3 different zones</li>
+      <li>Assign different team members to each</li>
+      <li>Add different metadata to each</li>
+      <li>Verify each zone retains its own data independently</li>
+      <li>Refresh and verify all zones persist correctly</li>
+    </ol>
+  </div>
+
+  <h2>Success Criteria</h2>
+  <ul>
+    <li>User can click any zone to open editor dialog</li>
+    <li>User can assign multiple team members via multi-select</li>
+    <li>User can edit zone name, mailbox count, and notes</li>
+    <li>All zone data persists across browser sessions</li>
+    <li>Cancel button closes dialog without saving</li>
+    <li>Save button updates store and closes dialog</li>
+  </ul>
+
+  <hr style="margin: 40px 0;">
+
+  <p style="text-align: center; color: #6b7280;">
+    <strong>Phase 4, Plan 01:</strong> Zone Assignment System<br>
+    Test harness created: 2026-02-05
+  </p>
+
+</body>
+</html>
