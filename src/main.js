@@ -45,7 +45,7 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 // Load and display commune boundary from saved config
 if (communeConfig.contour) {
-  L.geoJSON(communeConfig.contour, {
+  const boundaryLayer = L.geoJSON(communeConfig.contour, {
     style: {
       color: '#2563eb',      // Blue border
       weight: 3,
@@ -53,6 +53,8 @@ if (communeConfig.contour) {
       fillOpacity: 0.1
     }
   }).addTo(map);
+  // Fit map to commune bounds
+  map.fitBounds(boundaryLayer.getBounds(), { padding: [20, 20] });
 } else {
   // Fallback: fetch if contour not saved (shouldn't happen)
   fetchCommuneBoundary()
