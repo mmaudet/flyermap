@@ -57,6 +57,18 @@ export function initZoneLayer(mapInstance) {
   // Event handlers
   setupEventHandlers();
 
+  // Load existing zones
+  loadZonesFromStore();
+
+  // Subscribe to zone reload events
+  subscribe('zonesLoaded', () => {
+    // Clear existing layers
+    zoneGroup.clearLayers();
+    layersByZoneId.clear();
+    // Reload from store
+    loadZonesFromStore();
+  });
+
   return zoneGroup;
 }
 
@@ -66,6 +78,33 @@ export function initZoneLayer(mapInstance) {
  */
 function generateZoneId() {
   return 'zone_' + Date.now().toString(36) + Math.random().toString(36).substr(2);
+}
+
+/**
+ * Load zones from store and add to map
+ */
+function loadZonesFromStore() {
+  const zones = store.getZones();
+
+  zones.forEach(zone => {
+    // Create layer from GeoJSON
+    const geoJSONLayer = L.geoJSON(zone.geojson, {
+      style: ZONE_STYLE,
+      onEachFeature: (feature, layer) => {
+        // Store zone ID in layer
+        layer.options.zoneId = zone.id;
+
+        // Add to FeatureGroup
+        zoneGroup.addLayer(layer);
+
+        // Store reference
+        layersByZoneId.set(zone.id, layer);
+
+        // Bind popup
+        layer.bindPopup(`<strong>${zone.name}</strong>`);
+      }
+    });
+  });
 }
 
 /**
