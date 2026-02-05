@@ -6,6 +6,7 @@ import L from 'leaflet';
 import '@geoman-io/leaflet-geoman-free';
 import '@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css';
 import { store, subscribe } from '../state/store.js';
+import { openZoneEditor } from '../ui/zoneEditor.js';
 
 // Module-level variables
 let map = null;
@@ -103,6 +104,15 @@ function loadZonesFromStore() {
         // Bind popup
         layer.bindPopup(`<strong>${zone.name}</strong>`);
 
+        // Bind click event to open editor
+        layer.on('click', (e) => {
+          L.DomEvent.stopPropagation(e);
+          const currentZone = store.getZones().find(z => z.id === zone.id);
+          if (currentZone) {
+            openZoneEditor(currentZone);
+          }
+        });
+
         // Bind edit event
         layer.on('pm:update', () => {
           store.updateZone(zone.id, {
@@ -151,6 +161,22 @@ function setupEventHandlers() {
 
     // Bind popup with zone name
     layer.bindPopup(`<strong>${finalName}</strong>`);
+
+    // Bind click event to open editor
+    layer.on('click', (e) => {
+      L.DomEvent.stopPropagation(e);
+      const zone = store.getZones().find(z => z.id === zoneId);
+      if (zone) {
+        openZoneEditor(zone);
+      }
+    });
+
+    // Bind edit event
+    layer.on('pm:update', () => {
+      store.updateZone(zoneId, {
+        geojson: layer.toGeoJSON()
+      });
+    });
 
     // Store layer reference
     layersByZoneId.set(zoneId, layer);
