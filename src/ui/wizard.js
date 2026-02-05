@@ -6,9 +6,13 @@
  */
 
 import Wizard from '@adrii_/wizard-js';
+import { searchCommunesByPostalCode } from '../data/commune.js';
 
 // Module-scoped wizard instance (may be recreated)
 let wizard = null;
+
+// Selected commune from postal code lookup
+let selectedCommune = null;
 
 /**
  * Initialize and display the welcome wizard
@@ -38,6 +42,9 @@ export function initWelcomeWizard() {
   // Setup welcome step handler
   setupWelcomeStep();
 
+  // Setup postal code step handler
+  setupPostalStep();
+
   // Display wizard modal
   dialog.showModal();
 }
@@ -61,6 +68,119 @@ function setupWelcomeStep() {
     // Wizard-JS automatically advances to next step when next button clicked
     // No explicit navigation needed here
     console.log('Welcome step completed, advancing to postal code step');
+  });
+}
+
+/**
+ * Setup postal code step
+ *
+ * Handles postal code input, API lookup, and commune selection.
+ * Supports both single-result auto-selection and multi-result radio selection.
+ */
+function setupPostalStep() {
+  const input = document.getElementById('postal-code');
+  const nextButton = document.querySelector('[data-step-name="postal"] .wz-next-button');
+  const resultsContainer = document.getElementById('commune-results');
+
+  if (!input || !nextButton || !resultsContainer) {
+    console.error('Postal step elements not found');
+    return;
+  }
+
+  // Disable next button initially
+  nextButton.disabled = true;
+
+  // Handle postal code lookup on blur
+  input.addEventListener('blur', () => handlePostalCodeLookup(input, nextButton, resultsContainer));
+
+  // Handle Enter key
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handlePostalCodeLookup(input, nextButton, resultsContainer);
+    }
+  });
+}
+
+/**
+ * Handle postal code lookup via API
+ *
+ * Validates postal code, fetches communes, and handles single/multi-result cases.
+ *
+ * @param {HTMLInputElement} input - Postal code input element
+ * @param {HTMLButtonElement} nextButton - Next step button
+ * @param {HTMLElement} resultsContainer - Results display container
+ */
+async function handlePostalCodeLookup(input, nextButton, resultsContainer) {
+  const postalCode = input.value.trim();
+
+  // Validate postal code format
+  if (!/^[0-9]{5}$/.test(postalCode)) {
+    resultsContainer.innerHTML = '<p class="error">Code postal invalide (5 chiffres requis)</p>';
+    nextButton.disabled = true;
+    selectedCommune = null;
+    return;
+  }
+
+  // Show loading state
+  resultsContainer.innerHTML = '<p>Recherche...</p>';
+  nextButton.disabled = true;
+  selectedCommune = null;
+
+  try {
+    // Call API
+    const communes = await searchCommunesByPostalCode(postalCode);
+
+    // Handle empty results
+    if (communes.length === 0) {
+      resultsContainer.innerHTML = '<p class="error">Aucune commune trouvée</p>';
+      return;
+    }
+
+    // Single result: auto-select
+    if (communes.length === 1) {
+      selectedCommune = communes[0];
+      resultsContainer.innerHTML = `<p class="success">Commune trouvée : <strong>${communes[0].nom}</strong> (${communes[0].code})</p>`;
+      nextButton.disabled = false;
+      return;
+    }
+
+    // Multiple results: show selection UI
+    renderCommuneSelection(communes, nextButton, resultsContainer);
+  } catch (error) {
+    resultsContainer.innerHTML = '<p class="error">Erreur de connexion à l\'API</p>';
+    console.error('Postal code lookup failed:', error);
+  }
+}
+
+/**
+ * Render commune selection UI with radio buttons
+ *
+ * @param {Array} communes - Array of commune objects
+ * @param {HTMLButtonElement} nextButton - Next step button
+ * @param {HTMLElement} resultsContainer - Results display container
+ */
+function renderCommuneSelection(communes, nextButton, resultsContainer) {
+  let html = '<p>Plusieurs communes trouvées :</p>';
+
+  for (const commune of communes) {
+    html += `
+      <label class="commune-option">
+        <input type="radio" name="commune" value="${commune.code}" required>
+        ${commune.nom} (${commune.code})
+      </label>
+    `;
+  }
+
+  resultsContainer.innerHTML = html;
+
+  // Handle radio button selection
+  resultsContainer.addEventListener('change', (e) => {
+    if (e.target.name === 'commune') {
+      const selectedCode = e.target.value;
+      selectedCommune = communes.find(c => c.code === selectedCode);
+      nextButton.disabled = false;
+    }
   });
 }
 
