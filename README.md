@@ -128,7 +128,7 @@ Voir le fichier [LICENSE](LICENSE) pour plus de détails.
 
 ## Auteur
 
-Développement bénévole par Michel-Marie MAUDET pour la liste [Vivons Chapet](https://www.vivons-chapet.fr/) pour les élections municipales du 15 et 22 mars 2026 à Chapet (78130).
+Développement bénévole par Michel-Marie MAUDET ([michel.maudet@protonmail.com](mailto:michel.maudet@protonmail.com)) pour la liste [Vivons Chapet](https://www.vivons-chapet.fr/) pour les élections municipales du 15 et 22 mars 2026 à Chapet (78130).
 
 ---
 
