@@ -9,9 +9,9 @@ Requirements pour la version initiale. Chaque requirement est mappé aux phases 
 
 ### Carte
 
-- [ ] **MAP-01**: Afficher une carte Leaflet centrée sur Chapet (78130) avec zoom/pan
-- [ ] **MAP-02**: Afficher le contour communal de Chapet (via geo.api.gouv.fr)
-- [ ] **MAP-03**: Afficher les noms des rues sur la carte (tuiles OpenStreetMap)
+- [x] **MAP-01**: Afficher une carte Leaflet centrée sur Chapet (78130) avec zoom/pan ✓
+- [x] **MAP-02**: Afficher le contour communal de Chapet (via geo.api.gouv.fr) ✓
+- [x] **MAP-03**: Afficher les noms des rues sur la carte (tuiles OpenStreetMap) ✓
 
 ### Colistiers
 
@@ -85,9 +85,9 @@ Quelle phase couvre quel requirement. Mis à jour lors de la création du roadma
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| MAP-01 | Phase 1 | Pending |
-| MAP-02 | Phase 1 | Pending |
-| MAP-03 | Phase 1 | Pending |
+| MAP-01 | Phase 1 | Complete |
+| MAP-02 | Phase 1 | Complete |
+| MAP-03 | Phase 1 | Complete |
 | TEAM-01 | Phase 2 | Pending |
 | TEAM-02 | Phase 2 | Pending |
 | TEAM-03 | Phase 2 | Pending |
@@ -111,4 +111,4 @@ Quelle phase couvre quel requirement. Mis à jour lors de la création du roadma
 
 ---
 *Requirements defined: 2025-02-05*
-*Last updated: 2026-02-05 after roadmap creation*
+*Last updated: 2026-02-05 after Phase 1 completion*

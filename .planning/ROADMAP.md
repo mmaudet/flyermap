@@ -12,7 +12,7 @@ Transform a list of volunteer addresses into an interactive zone management syst
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Foundation** - Interactive map with commune boundaries
+- [x] **Phase 1: Foundation** - Interactive map with commune boundaries ✓
 - [ ] **Phase 2: Team Management** - Geocoded team markers with persistence
 - [ ] **Phase 3: Zone Creation** - Polygon drawing and editing
 - [ ] **Phase 4: Assignment System** - Connect team to zones with export
@@ -30,7 +30,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 1 plan
 
 Plans:
-- [ ] 01-01-PLAN.md — Vite + Leaflet map with Chapet commune boundary
+- [x] 01-01-PLAN.md — Vite + Leaflet map with Chapet commune boundary ✓
 
 ### Phase 2: Team Management
 **Goal**: Team members appear on map with persistent storage
@@ -85,7 +85,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/1 | Planned | - |
+| 1. Foundation | 1/1 | Complete ✓ | 2026-02-05 |
 | 2. Team Management | 0/TBD | Not started | - |
 | 3. Zone Creation | 0/TBD | Not started | - |
 | 4. Assignment System | 0/TBD | Not started | - |
