@@ -9,15 +9,15 @@ Requirements pour milestone v1.1 (Généricité + Export). Chaque requirement ma
 
 ### Wizard Onboarding
 
-- [ ] **WIZ-01**: L'utilisateur voit un écran de bienvenue expliquant l'application au premier lancement
-- [ ] **WIZ-02**: L'utilisateur voit un stepper de progression indiquant l'étape courante du wizard
-- [ ] **WIZ-03**: L'utilisateur peut saisir un code postal et voir la/les commune(s) correspondante(s)
-- [ ] **WIZ-04**: L'utilisateur peut choisir parmi plusieurs communes si le code postal en contient plusieurs
-- [ ] **WIZ-05**: L'utilisateur voit un aperçu du contour de la commune avant de confirmer
-- [ ] **WIZ-06**: L'utilisateur voit le format CSV attendu pour les colistiers (colonnes requises)
-- [ ] **WIZ-07**: L'utilisateur peut uploader un fichier CSV de colistiers
-- [ ] **WIZ-08**: L'utilisateur voit les erreurs de validation du CSV (colonnes manquantes, format incorrect)
-- [ ] **WIZ-09**: L'utilisateur peut confirmer et lancer la génération de la carte avec géocodage
+- [x] **WIZ-01**: L'utilisateur voit un écran de bienvenue expliquant l'application au premier lancement
+- [x] **WIZ-02**: L'utilisateur voit un stepper de progression indiquant l'étape courante du wizard
+- [x] **WIZ-03**: L'utilisateur peut saisir un code postal et voir la/les commune(s) correspondante(s)
+- [x] **WIZ-04**: L'utilisateur peut choisir parmi plusieurs communes si le code postal en contient plusieurs
+- [x] **WIZ-05**: L'utilisateur voit un aperçu du contour de la commune avant de confirmer
+- [x] **WIZ-06**: L'utilisateur voit le format CSV attendu pour les colistiers (colonnes requises)
+- [x] **WIZ-07**: L'utilisateur peut uploader un fichier CSV de colistiers
+- [x] **WIZ-08**: L'utilisateur voit les erreurs de validation du CSV (colonnes manquantes, format incorrect)
+- [x] **WIZ-09**: L'utilisateur peut confirmer et lancer la génération de la carte avec géocodage
 
 ### Reconfiguration
 
@@ -60,15 +60,15 @@ Requirements pour milestone v1.1 (Généricité + Export). Chaque requirement ma
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| WIZ-01 | Phase 5 | Pending |
-| WIZ-02 | Phase 5 | Pending |
-| WIZ-03 | Phase 5 | Pending |
-| WIZ-04 | Phase 5 | Pending |
-| WIZ-05 | Phase 5 | Pending |
-| WIZ-06 | Phase 6 | Pending |
-| WIZ-07 | Phase 6 | Pending |
-| WIZ-08 | Phase 6 | Pending |
-| WIZ-09 | Phase 6 | Pending |
+| WIZ-01 | Phase 5 | Complete |
+| WIZ-02 | Phase 5 | Complete |
+| WIZ-03 | Phase 5 | Complete |
+| WIZ-04 | Phase 5 | Complete |
+| WIZ-05 | Phase 5 | Complete |
+| WIZ-06 | Phase 6 | Complete |
+| WIZ-07 | Phase 6 | Complete |
+| WIZ-08 | Phase 6 | Complete |
+| WIZ-09 | Phase 6 | Complete |
 | RECONF-01 | Phase 7 | Pending |
 | RECONF-02 | Phase 7 | Pending |
 | RECONF-03 | Phase 7 | Pending |
