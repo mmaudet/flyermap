@@ -45,45 +45,27 @@ export function initWelcomeWizard() {
 
   // Create Wizard instance with configuration
   wizard = new Wizard({
-    wz_class: '.wizard',           // Container selector
-    wz_nav_style: 'dots',           // Progress indicator style (dots for steps)
-    wz_button_style: 'buttons',     // Use custom buttons per step
-    progressbar: true               // Show progress bar
+    wz_class: '.wizard',
+    wz_nav_style: 'dots',
+    nav: true,
+    buttons: true,
+    // French labels for buttons
+    prev: 'Précédent',
+    next: 'Suivant',
+    finish: 'Confirmer'
   });
 
   // Initialize wizard AFTER dialog is shown
   wizard.init();
-
-  // Setup welcome step handler
-  setupWelcomeStep();
 
   // Setup postal code step handler
   setupPostalStep();
 
   // Setup preview step handler
   setupPreviewStep();
-}
 
-/**
- * Setup welcome step navigation
- *
- * Handles "Commencer" button click to advance to next step.
- * Wizard-JS handles the actual navigation automatically.
- */
-function setupWelcomeStep() {
-  const welcomeButton = document.querySelector('[data-step-name="welcome"] .wz-next-button');
-
-  if (!welcomeButton) {
-    console.error('Welcome step next button not found');
-    return;
-  }
-
-  // Add click listener - Wizard-JS will handle step transition
-  welcomeButton.addEventListener('click', () => {
-    // Wizard-JS automatically advances to next step when next button clicked
-    // No explicit navigation needed here
-    console.log('Welcome step completed, advancing to postal code step');
-  });
+  // Setup wizard completion handler
+  setupWizardCompletion();
 }
 
 /**
@@ -94,25 +76,21 @@ function setupWelcomeStep() {
  */
 function setupPostalStep() {
   const input = document.getElementById('postal-code');
-  const nextButton = document.querySelector('[data-step-name="postal"] .wz-next-button');
   const resultsContainer = document.getElementById('commune-results');
 
-  if (!input || !nextButton || !resultsContainer) {
+  if (!input || !resultsContainer) {
     console.error('Postal step elements not found');
     return;
   }
 
-  // Disable next button initially
-  nextButton.disabled = true;
-
   // Handle postal code lookup on blur
-  input.addEventListener('blur', () => handlePostalCodeLookup(input, nextButton, resultsContainer));
+  input.addEventListener('blur', () => handlePostalCodeLookup(input, resultsContainer));
 
   // Handle Enter key
   input.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      handlePostalCodeLookup(input, nextButton, resultsContainer);
+      handlePostalCodeLookup(input, resultsContainer);
     }
   });
 }
@@ -123,23 +101,20 @@ function setupPostalStep() {
  * Validates postal code, fetches communes, and handles single/multi-result cases.
  *
  * @param {HTMLInputElement} input - Postal code input element
- * @param {HTMLButtonElement} nextButton - Next step button
  * @param {HTMLElement} resultsContainer - Results display container
  */
-async function handlePostalCodeLookup(input, nextButton, resultsContainer) {
+async function handlePostalCodeLookup(input, resultsContainer) {
   const postalCode = input.value.trim();
 
   // Validate postal code format
   if (!/^[0-9]{5}$/.test(postalCode)) {
     resultsContainer.innerHTML = '<p class="error">Code postal invalide (5 chiffres requis)</p>';
-    nextButton.disabled = true;
     selectedCommune = null;
     return;
   }
 
   // Show loading state
   resultsContainer.innerHTML = '<p>Recherche...</p>';
-  nextButton.disabled = true;
   selectedCommune = null;
 
   try {
@@ -156,12 +131,11 @@ async function handlePostalCodeLookup(input, nextButton, resultsContainer) {
     if (communes.length === 1) {
       selectedCommune = communes[0];
       resultsContainer.innerHTML = `<p class="success">Commune trouvée : <strong>${communes[0].nom}</strong> (${communes[0].code})</p>`;
-      nextButton.disabled = false;
       return;
     }
 
     // Multiple results: show selection UI
-    renderCommuneSelection(communes, nextButton, resultsContainer);
+    renderCommuneSelection(communes, resultsContainer);
   } catch (error) {
     resultsContainer.innerHTML = '<p class="error">Erreur de connexion à l\'API</p>';
     console.error('Postal code lookup failed:', error);
@@ -172,10 +146,9 @@ async function handlePostalCodeLookup(input, nextButton, resultsContainer) {
  * Render commune selection UI with radio buttons
  *
  * @param {Array} communes - Array of commune objects
- * @param {HTMLButtonElement} nextButton - Next step button
  * @param {HTMLElement} resultsContainer - Results display container
  */
-function renderCommuneSelection(communes, nextButton, resultsContainer) {
+function renderCommuneSelection(communes, resultsContainer) {
   let html = '<p>Plusieurs communes trouvées :</p>';
 
   for (const commune of communes) {
@@ -194,7 +167,6 @@ function renderCommuneSelection(communes, nextButton, resultsContainer) {
     if (e.target.name === 'commune') {
       const selectedCode = e.target.value;
       selectedCommune = communes.find(c => c.code === selectedCode);
-      nextButton.disabled = false;
     }
   });
 }
@@ -207,23 +179,44 @@ function renderCommuneSelection(communes, nextButton, resultsContainer) {
  */
 function setupPreviewStep() {
   const container = document.querySelector('.wizard');
-  const nextButton = document.querySelector('[data-step-name="preview"] .wz-next-button');
 
-  if (!container || !nextButton) {
-    console.error('Preview step elements not found');
+  if (!container) {
+    console.error('Wizard container not found');
     return;
   }
 
-  // Listen for Wizard-JS step change events
-  container.addEventListener('wz.update', () => {
-    // Check if we're on the preview step (0-indexed, step 2)
-    if (wizard && wizard.current_step === 2 && selectedCommune) {
-      showCommunePreview(selectedCommune);
+  // Listen for Wizard-JS navigation events
+  container.addEventListener('wz.btn.next', () => {
+    // Check if we're moving to the preview step (step 2, 0-indexed)
+    // This fires BEFORE the step changes, so check if going to step 2
+    if (wizard && wizard.current_step === 1 && selectedCommune) {
+      // Will be on step 2 after this
+      setTimeout(() => showCommunePreview(selectedCommune), 100);
     }
   });
 
-  // Handle wizard completion on confirm button click
-  nextButton.addEventListener('click', (e) => {
+  // Also handle nav clicks
+  container.addEventListener('wz.nav.forward', () => {
+    if (wizard && wizard.current_step === 2 && selectedCommune) {
+      setTimeout(() => showCommunePreview(selectedCommune), 100);
+    }
+  });
+}
+
+/**
+ * Setup wizard completion handler
+ *
+ * Listens for the wizard end event and saves configuration.
+ */
+function setupWizardCompletion() {
+  const container = document.querySelector('.wizard');
+
+  if (!container) {
+    return;
+  }
+
+  // Listen for wizard end event (when Finish/Confirm button is clicked)
+  container.addEventListener('wz.end', (e) => {
     e.preventDefault();
     handleWizardComplete();
   });
@@ -302,23 +295,11 @@ function handleWizardComplete() {
     return;
   }
 
-  // Clear wizard state
-  clearWizardState();
-
   // Close dialog
   const dialog = document.getElementById('welcome-wizard');
   if (dialog) {
     dialog.close();
   }
-}
-
-/**
- * Clear wizard state
- *
- * Stub function for sessionStorage cleanup if persistence is added later.
- */
-function clearWizardState() {
-  // TODO: Implement sessionStorage cleanup if persistence added
 }
 
 /**

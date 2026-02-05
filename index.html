@@ -71,36 +71,35 @@
 
     <dialog id="welcome-wizard" class="wizard-dialog">
       <div class="wizard">
-        <!-- Step 1: Welcome -->
-        <div class="wz-step" data-step-name="welcome">
-          <h2>Bienvenue sur FlyerMap</h2>
-          <p>Configurez votre commune en quelques étapes pour commencer.</p>
-          <p><strong>Étapes :</strong></p>
-          <ol>
-            <li>Entrez votre code postal</li>
-            <li>Sélectionnez votre commune</li>
-            <li>Confirmez la zone de travail</li>
-          </ol>
-          <button class="wz-next-button btn-primary">Commencer</button>
-        </div>
-
-        <!-- Step 2: Postal code -->
-        <div class="wz-step" data-step-name="postal">
-          <h3>Votre code postal</h3>
-          <div class="form-field">
-            <label for="postal-code">Code postal (5 chiffres)</label>
-            <input type="text" id="postal-code" name="postalCode" pattern="[0-9]{5}" maxlength="5" required placeholder="78130">
+        <div class="wizard-content">
+          <!-- Step 1: Welcome -->
+          <div class="wizard-step" data-wz-title="Bienvenue">
+            <h2>Bienvenue sur FlyerMap</h2>
+            <p>Configurez votre commune en quelques étapes pour commencer.</p>
+            <p><strong>Étapes :</strong></p>
+            <ol>
+              <li>Entrez votre code postal</li>
+              <li>Sélectionnez votre commune</li>
+              <li>Confirmez la zone de travail</li>
+            </ol>
           </div>
-          <div id="commune-results"></div>
-          <button class="wz-next-button btn-primary" disabled>Suivant</button>
-        </div>
 
-        <!-- Step 3: Preview -->
-        <div class="wz-step" data-step-name="preview">
-          <h3>Confirmer votre commune</h3>
-          <p id="preview-commune-name"></p>
-          <div id="preview-map" style="height: 300px; border: 1px solid #ddd; margin: 1rem 0;"></div>
-          <button class="wz-next-button btn-primary">Confirmer</button>
+          <!-- Step 2: Postal code -->
+          <div class="wizard-step" data-wz-title="Code postal">
+            <h3>Votre code postal</h3>
+            <div class="form-field">
+              <label for="postal-code">Code postal (5 chiffres)</label>
+              <input type="text" id="postal-code" name="postalCode" pattern="[0-9]{5}" maxlength="5" required placeholder="78130">
+            </div>
+            <div id="commune-results"></div>
+          </div>
+
+          <!-- Step 3: Preview -->
+          <div class="wizard-step" data-wz-title="Confirmation">
+            <h3>Confirmer votre commune</h3>
+            <p id="preview-commune-name"></p>
+            <div id="preview-map" style="height: 300px; border: 1px solid #ddd; margin: 1rem 0;"></div>
+          </div>
         </div>
       </div>
     </dialog>
