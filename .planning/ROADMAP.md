@@ -119,7 +119,12 @@ Plans:
 5. User can export zone as CSV with structured data
 6. User sees loading indicator while OSM streets are being fetched
 
-**Plans:** 0/TBD
+**Plans:** 3 plans
+
+Plans:
+- [ ] 08-01-PLAN.md — Install dependencies, extend Overpass for streets, map capture utility
+- [ ] 08-02-PLAN.md — Zone export service (PDF and CSV generation)
+- [ ] 08-03-PLAN.md — UI integration with export buttons and loading indicators
 
 ---
 
@@ -134,7 +139,7 @@ Plans:
 | 5. Wizard Foundation | v1.1 | 3/3 | Complete | 2026-02-05 |
 | 6. CSV Import in Wizard | v1.1 | 3/3 | Complete | 2026-02-05 |
 | 7. Reconfiguration | v1.1 | 2/2 | Complete | 2026-02-05 |
-| 8. Zone Export | v1.1 | 0/TBD | Pending | — |
+| 8. Zone Export | v1.1 | 0/3 | Planned | — |
 
 ---
 
@@ -156,10 +161,10 @@ See [v1.0 Archive](milestones/v1.0-ROADMAP.md) for full details.
 
 ## Next Steps
 
-To plan Phase 8:
+To execute Phase 8:
 ```
-/gsd:plan-phase 8
+/gsd:execute-phase 8
 ```
 
 ---
-*Roadmap updated: 2026-02-05 after Phase 7 planning*
+*Roadmap updated: 2026-02-05 after Phase 8 planning*
