@@ -59,7 +59,7 @@ export function initWelcomeWizard() {
     // French labels for buttons
     prev: 'Précédent',
     next: 'Suivant',
-    finish: 'Confirmer'
+    finish: 'Terminer'
   });
 
   // Initialize wizard AFTER dialog is shown
@@ -611,6 +611,8 @@ function showCommunePreview(commune) {
  * Handle wizard completion
  *
  * Saves commune config to localStorage and closes the wizard dialog.
+ * Handles both simple commune selection and CSV import flows.
+ * Team members are already saved to store during geocoding step.
  */
 function handleWizardComplete() {
   if (!selectedCommune) {
@@ -627,7 +629,11 @@ function handleWizardComplete() {
     return;
   }
 
-  // Close dialog
+  // Reset module state
+  selectedFile = null;
+  validatedMembers = null;
+
+  // Close dialog - triggers map refresh via existing event handlers
   const dialog = document.getElementById('welcome-wizard');
   if (dialog) {
     dialog.close();
