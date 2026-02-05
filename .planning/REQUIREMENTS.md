@@ -21,9 +21,9 @@ Requirements pour milestone v1.1 (Généricité + Export). Chaque requirement ma
 
 ### Reconfiguration
 
-- [ ] **RECONF-01**: L'utilisateur peut accéder à un bouton pour reconfigurer/changer de commune
-- [ ] **RECONF-02**: L'utilisateur voit un avertissement de perte de données avant reconfiguration
-- [ ] **RECONF-03**: L'utilisateur peut annuler la reconfiguration et garder ses données
+- [x] **RECONF-01**: L'utilisateur peut accéder à un bouton pour reconfigurer/changer de commune
+- [x] **RECONF-02**: L'utilisateur voit un avertissement de perte de données avant reconfiguration
+- [x] **RECONF-03**: L'utilisateur peut annuler la reconfiguration et garder ses données
 
 ### Export Zone
 
@@ -69,9 +69,9 @@ Requirements pour milestone v1.1 (Généricité + Export). Chaque requirement ma
 | WIZ-07 | Phase 6 | Complete |
 | WIZ-08 | Phase 6 | Complete |
 | WIZ-09 | Phase 6 | Complete |
-| RECONF-01 | Phase 7 | Pending |
-| RECONF-02 | Phase 7 | Pending |
-| RECONF-03 | Phase 7 | Pending |
+| RECONF-01 | Phase 7 | Complete |
+| RECONF-02 | Phase 7 | Complete |
+| RECONF-03 | Phase 7 | Complete |
 | EXP-01 | Phase 8 | Pending |
 | EXP-02 | Phase 8 | Pending |
 | EXP-03 | Phase 8 | Pending |
