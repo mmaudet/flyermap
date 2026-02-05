@@ -10,6 +10,7 @@ import { initImportHandler } from './ui/importFlow.js';
 import { initZoneEditor } from './ui/zoneEditor.js';
 import { initExportImport } from './ui/exportImport.js';
 import { initWelcomeWizard } from './ui/wizard.js';
+import { initReconfigure } from './ui/reconfigure.js';
 import { loadCommuneConfig } from './data/storage.js';
 
 // Check for commune configuration (first-launch detection)
@@ -84,3 +85,6 @@ initZoneLayer(map);
 // Initialize Phase 4 features
 initZoneEditor();
 initExportImport();
+
+// Initialize Phase 7 features (reconfiguration)
+initReconfigure();
