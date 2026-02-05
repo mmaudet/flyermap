@@ -3,6 +3,9 @@ import 'leaflet/dist/leaflet.css';
 import './style.css';
 import { CHAPET_CENTER, DEFAULT_ZOOM, MIN_ZOOM, MAX_ZOOM } from './map/config.js';
 import { fetchCommuneBoundary } from './data/commune.js';
+import { initMarkerLayer } from './map/markerLayer.js';
+import { initSidePanel } from './ui/sidePanel.js';
+import { initImportHandler } from './ui/importFlow.js';
 
 // Initialize Leaflet map centered on Chapet
 const map = L.map('map', {
@@ -33,3 +36,8 @@ fetchCommuneBoundary()
   .catch(error => {
     console.error('Could not display commune boundary:', error);
   });
+
+// Initialize Phase 2 features
+initMarkerLayer(map);
+initSidePanel();
+initImportHandler();
