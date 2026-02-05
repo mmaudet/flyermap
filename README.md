@@ -27,10 +27,14 @@ FlyerMap permet aux coordinateurs de campagne de visualiser et organiser la dist
 - Attribution des colistiers aux zones
 - Notes et métadonnées par zone
 
+![Zones de distribution](docs/screenshots/zones-map.png)
+
 ### Export
 - **Export PDF par zone** : nom, colistiers assignés, carte, liste des rues OSM
 - **Export PDF global** : toutes les zones en un seul document
 - **Export/Import JSON** : sauvegarde complète des données
+
+![Export PDF](docs/screenshots/pdf-export.png)
 
 ### Reconfiguration
 - Changement de commune avec confirmation
@@ -64,10 +68,10 @@ npm run build
 
 ## APIs utilisées
 
-- **geo.api.gouv.fr** : recherche de communes par code postal
-- **data.geopf.fr** : géocodage des adresses françaises
-- **Overpass API** : données OpenStreetMap (bâtiments, rues)
-- **OpenStreetMap** : tuiles cartographiques
+- **[geo.api.gouv.fr](https://geo.api.gouv.fr/)** : recherche de communes par code postal
+- **[data.geopf.fr](https://data.geopf.fr/)** : géocodage des adresses françaises
+- **[Overpass API](https://overpass-api.de/)** : données OpenStreetMap (bâtiments, rues)
+- **[OpenStreetMap](https://www.openstreetmap.org/)** : tuiles cartographiques
 
 ## FAQ
 
@@ -124,7 +128,7 @@ Voir le fichier [LICENSE](LICENSE) pour plus de détails.
 
 ## Auteur
 
-Développé pour faciliter l'organisation des campagnes électorales locales.
+Développement bénévole par Michel-Marie MAUDET pour la liste [Vivons Chapet](https://www.vivons-chapet.fr/) pour les élections municipales du 15 et 22 mars 2026 à Chapet (78130).
 
 ---
 
