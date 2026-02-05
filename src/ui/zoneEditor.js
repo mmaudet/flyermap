@@ -4,17 +4,21 @@
  */
 import { store } from '../state/store.js';
 import { updateZoneStyle, removeZone } from '../map/zoneLayer.js';
-import { countBuildingsDetailed } from '../services/overpass.js';
+import { countBuildingsDetailed, getStreetsInBbox } from '../services/overpass.js';
 import { getTeamMemberColor } from '../map/markerStyles.js';
+import { exportZonePDF, exportZoneCSV } from '../services/zoneExport.js';
 
 let dialog = null;
 let currentZone = null;
+let mapInstance = null;
 
 /**
  * Initialize zone editor dialog
  * Sets up form handlers and event listeners
+ * @param {L.Map} map - Leaflet map instance for export capture
  */
-export function initZoneEditor() {
+export function initZoneEditor(map) {
+  mapInstance = map;
   dialog = document.getElementById('zone-editor');
   const form = dialog.querySelector('form');
 
@@ -25,6 +29,12 @@ export function initZoneEditor() {
   // Handle delete button
   const deleteBtn = document.getElementById('delete-zone-btn');
   deleteBtn.addEventListener('click', handleDelete);
+
+  // Handle export buttons
+  const exportPdfBtn = document.getElementById('export-pdf-btn');
+  const exportCsvBtn = document.getElementById('export-csv-btn');
+  exportPdfBtn.addEventListener('click', handleExportPDF);
+  exportCsvBtn.addEventListener('click', handleExportCSV);
 
   // Handle dialog close to process form data
   dialog.addEventListener('close', () => {
@@ -62,6 +72,7 @@ export function initZoneEditor() {
     // Reset form and clear status
     form.reset();
     document.getElementById('estimate-status').textContent = '';
+    document.getElementById('export-status').textContent = '';
     currentZone = null;
   });
 }
@@ -172,6 +183,71 @@ export function openZoneEditor(zone) {
     container.appendChild(label);
   });
 
+  // Clear export status
+  document.getElementById('export-status').textContent = '';
+
   // Show the dialog as modal
   dialog.showModal();
+}
+
+/**
+ * Handle PDF export button click
+ */
+async function handleExportPDF() {
+  if (!currentZone || !mapInstance) return;
+
+  const exportPdfBtn = document.getElementById('export-pdf-btn');
+  const exportCsvBtn = document.getElementById('export-csv-btn');
+  const exportStatus = document.getElementById('export-status');
+
+  try {
+    exportPdfBtn.disabled = true;
+    exportCsvBtn.disabled = true;
+    exportStatus.className = '';
+
+    await exportZonePDF(currentZone, mapInstance, (message) => {
+      exportStatus.textContent = message;
+    });
+
+    exportStatus.textContent = 'PDF téléchargé';
+    exportStatus.className = 'success';
+  } catch (error) {
+    console.error('PDF export failed:', error);
+    exportStatus.textContent = 'Erreur: ' + error.message;
+    exportStatus.className = 'error';
+  } finally {
+    exportPdfBtn.disabled = false;
+    exportCsvBtn.disabled = false;
+  }
+}
+
+/**
+ * Handle CSV export button click
+ */
+async function handleExportCSV() {
+  if (!currentZone) return;
+
+  const exportPdfBtn = document.getElementById('export-pdf-btn');
+  const exportCsvBtn = document.getElementById('export-csv-btn');
+  const exportStatus = document.getElementById('export-status');
+
+  try {
+    exportPdfBtn.disabled = true;
+    exportCsvBtn.disabled = true;
+    exportStatus.textContent = 'Récupération des rues...';
+    exportStatus.className = '';
+
+    const streets = await getStreetsInBbox(currentZone.geojson);
+    exportZoneCSV(currentZone, streets);
+
+    exportStatus.textContent = 'CSV téléchargé';
+    exportStatus.className = 'success';
+  } catch (error) {
+    console.error('CSV export failed:', error);
+    exportStatus.textContent = 'Erreur: ' + error.message;
+    exportStatus.className = 'error';
+  } finally {
+    exportPdfBtn.disabled = false;
+    exportCsvBtn.disabled = false;
+  }
 }

@@ -83,8 +83,8 @@ initImportHandler();
 initZoneLayer(map);
 
 // Initialize Phase 4 features
-initZoneEditor();
-initExportImport();
+initZoneEditor(map);
+initExportImport(map);
 
 // Initialize Phase 7 features (reconfiguration)
 initReconfigure();

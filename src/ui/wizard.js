@@ -196,11 +196,31 @@ function setupPreviewStep() {
   }
 
   // Listen for Wizard-JS navigation events
-  container.addEventListener('wz.btn.next', () => {
-    // Check if we're moving to the preview step (step 2, 0-indexed)
-    // This fires BEFORE the step changes, so check if going to step 2
-    if (wizard && wizard.current_step === 1 && selectedCommune) {
-      // Will be on step 2 after this
+  container.addEventListener('wz.btn.next', async (e) => {
+    // Step 1 -> Step 2 (postal code -> preview): validate commune selection
+    if (wizard && wizard.current_step === 1) {
+      // If no commune selected, try to trigger lookup first
+      if (!selectedCommune) {
+        const input = document.getElementById('postal-code');
+        const resultsContainer = document.getElementById('commune-results');
+        if (input && resultsContainer && /^[0-9]{5}$/.test(input.value.trim())) {
+          // Trigger lookup and wait for it
+          await handlePostalCodeLookup(input, resultsContainer);
+        }
+      }
+
+      // Block navigation if still no commune selected
+      if (!selectedCommune) {
+        e.preventDefault();
+        e.stopPropagation();
+        const resultsContainer = document.getElementById('commune-results');
+        if (resultsContainer && !resultsContainer.querySelector('.error')) {
+          resultsContainer.innerHTML = '<p class="error">Veuillez entrer un code postal valide</p>';
+        }
+        return;
+      }
+
+      // Commune selected - show preview after transition
       setTimeout(() => showCommunePreview(selectedCommune), 100);
     }
 

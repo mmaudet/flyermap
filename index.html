@@ -20,12 +20,17 @@
         <p class="empty-message">Aucun colistier importé</p>
       </div>
       <div class="panel-footer">
-        <button id="export-btn" class="action-btn">Exporter JSON</button>
-        <label class="action-btn import-label">
-          Importer JSON
-          <input type="file" id="import-file" accept=".json" hidden>
-        </label>
-        <button id="reconfigure-btn" class="action-btn btn-reconfigure">Changer de commune</button>
+        <div class="footer-row">
+          <button id="export-btn" class="action-btn-sm">Exporter JSON</button>
+          <label class="action-btn-sm import-label">
+            Importer JSON
+            <input type="file" id="import-file" accept=".json" hidden>
+          </label>
+        </div>
+        <div class="footer-row">
+          <button id="export-all-zones-btn" class="action-btn-sm btn-export-zones">Exporter toutes les zones</button>
+          <button id="reconfigure-btn" class="action-btn-sm btn-reconfigure">Changer de commune</button>
+        </div>
       </div>
     </div>
 
@@ -59,6 +64,19 @@
         <div class="form-field">
           <label for="zone-notes">Notes</label>
           <textarea id="zone-notes" name="notes" rows="4" placeholder="Notes additionnelles..."></textarea>
+        </div>
+
+        <div class="export-section">
+          <label>Exporter la zone</label>
+          <div class="export-buttons">
+            <button type="button" id="export-pdf-btn" class="btn-export">
+              PDF
+            </button>
+            <button type="button" id="export-csv-btn" class="btn-export">
+              CSV
+            </button>
+          </div>
+          <small id="export-status"></small>
         </div>
 
         <div class="button-row">

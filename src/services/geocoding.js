@@ -26,13 +26,14 @@ function isInFrance(lat, lng) {
 }
 
 /**
- * Geocode a single French address
+ * Geocode a single French address with retry logic
  * @param {string} address - Full address to geocode
  * @param {string|null} postcode - Optional postal code for better accuracy
+ * @param {number} maxRetries - Maximum number of retries (default 2)
  * @returns {Promise<Object>} {lat, lng, label, score}
  * @throws {Error} If geocoding fails or address not found
  */
-export async function geocodeAddress(address, postcode = null) {
+export async function geocodeAddress(address, postcode = null, maxRetries = 3) {
   const params = new URLSearchParams({
     q: address,
     limit: 1,
@@ -43,36 +44,63 @@ export async function geocodeAddress(address, postcode = null) {
     params.append('postcode', postcode);
   }
 
-  const response = await fetch(`${BASE_URL}?${params}`);
+  let lastError = null;
 
-  if (!response.ok) {
-    throw new Error(`Geocoding failed: ${response.status} ${response.statusText}`);
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      const response = await fetch(`${BASE_URL}?${params}`);
+
+      if (!response.ok) {
+        // Retry on 5xx server errors
+        if (response.status >= 500 && attempt < maxRetries) {
+          const delay = 1000 * (attempt + 1);
+          console.warn(`Geocoding ${response.status}, retry ${attempt + 1}/${maxRetries} in ${delay}ms...`);
+          lastError = new Error(`Geocoding failed: ${response.status}`);
+          await new Promise(resolve => setTimeout(resolve, delay));
+          continue;
+        }
+        throw new Error(`Geocoding failed: ${response.status} ${response.statusText}`);
+      }
+
+      const data = await response.json();
+
+      if (!data.features || data.features.length === 0) {
+        throw new Error('Address not found');
+      }
+
+      const feature = data.features[0];
+      const coords = feature.geometry.coordinates;
+
+      // CRITICAL: GeoJSON format is [lng, lat], swap for Leaflet [lat, lng]
+      const lat = coords[1];
+      const lng = coords[0];
+
+      // Validate coordinates are in France
+      if (!isInFrance(lat, lng)) {
+        console.warn(`Warning: Coordinates outside France bounds: [${lat}, ${lng}] for "${address}"`);
+      }
+
+      return {
+        lat,
+        lng,
+        label: feature.properties.label,
+        score: feature.properties.score || 0
+      };
+
+    } catch (error) {
+      // Retry on network errors (TypeError: Failed to fetch)
+      if (error.name === 'TypeError' && attempt < maxRetries) {
+        const delay = 1000 * (attempt + 1);
+        console.warn(`Geocoding network error, retry ${attempt + 1}/${maxRetries} in ${delay}ms...`);
+        lastError = error;
+        await new Promise(resolve => setTimeout(resolve, delay));
+        continue;
+      }
+      throw error;
+    }
   }
 
-  const data = await response.json();
-
-  if (!data.features || data.features.length === 0) {
-    throw new Error('Address not found');
-  }
-
-  const feature = data.features[0];
-  const coords = feature.geometry.coordinates;
-
-  // CRITICAL: GeoJSON format is [lng, lat], swap for Leaflet [lat, lng]
-  const lat = coords[1];
-  const lng = coords[0];
-
-  // Validate coordinates are in France
-  if (!isInFrance(lat, lng)) {
-    console.warn(`Warning: Coordinates outside France bounds: [${lat}, ${lng}] for "${address}"`);
-  }
-
-  return {
-    lat,
-    lng,
-    label: feature.properties.label,
-    score: feature.properties.score || 0
-  };
+  throw lastError || new Error('Geocoding failed after retries');
 }
 
 /**

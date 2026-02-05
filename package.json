@@ -14,7 +14,9 @@
   "dependencies": {
     "@adrii_/wizard-js": "^2.0.3",
     "@geoman-io/leaflet-geoman-free": "^2.19.2",
+    "jspdf": "^4.1.0",
     "leaflet": "1.9.4",
+    "leaflet-simple-map-screenshoter": "^0.5.0",
     "papaparse": "^5.5.3"
   }
 }
