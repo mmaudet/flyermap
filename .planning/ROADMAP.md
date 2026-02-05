@@ -2,14 +2,14 @@
 
 ## Milestones
 
-- ✅ **v1.0 MVP** — Phases 1-4 (shipped 2026-02-05) — [Archive](milestones/v1.0-ROADMAP.md)
-- 🔄 **v1.1 Généricité + Export** — Phases 5-8 (current)
+- v1.0 MVP — Phases 1-4 (shipped 2026-02-05) — [Archive](milestones/v1.0-ROADMAP.md)
+- **v1.1 Genericite + Export** — Phases 5-8 (current)
 
 ---
 
-## v1.1 Généricité + Export
+## v1.1 Genericite + Export
 
-**Goal:** Rendre l'application générique (wizard onboarding pour choisir la commune) et permettre l'export de fiches par zone avec rues OSM.
+**Goal:** Rendre l'application generique (wizard onboarding pour choisir la commune) et permettre l'export de fiches par zone avec rues OSM.
 
 **Status:** In Progress
 **Depth:** Quick (4 phases)
@@ -17,16 +17,16 @@
 
 ### Phase 5: Wizard Foundation
 
-**Goal:** L'utilisateur peut sélectionner sa commune via code postal au premier lancement
+**Goal:** L'utilisateur peut selectionner sa commune via code postal au premier lancement
 
 **Dependencies:** v1.0 completed
 
 **Requirements:**
-- WIZ-01: Écran de bienvenue au premier lancement
+- WIZ-01: Ecran de bienvenue au premier lancement
 - WIZ-02: Stepper de progression
 - WIZ-03: Saisie code postal et lookup communes
 - WIZ-04: Choix si plusieurs communes
-- WIZ-05: Aperçu contour commune avant confirmation
+- WIZ-05: Apercu contour commune avant confirmation
 
 **Success Criteria:**
 1. User sees welcome screen explaining the app on first launch
@@ -51,10 +51,10 @@ Plans:
 **Dependencies:** Phase 5 (wizard foundation must exist)
 
 **Requirements:**
-- WIZ-06: Format CSV expliqué
+- WIZ-06: Format CSV explique
 - WIZ-07: Upload CSV colistiers
 - WIZ-08: Validation CSV avec erreurs
-- WIZ-09: Confirmation et génération carte + géocodage
+- WIZ-09: Confirmation et generation carte + geocodage
 
 **Success Criteria:**
 1. User sees clear explanation of expected CSV format (required columns)
@@ -63,19 +63,24 @@ Plans:
 4. User can confirm and launch map generation with automatic geocoding
 5. Map loads with selected commune and geocoded team members
 
-**Plans:** 0/TBD
+**Plans:** 3 plans
+
+Plans:
+- [ ] 06-01-PLAN.md — Wizard HTML steps and CSV template
+- [ ] 06-02-PLAN.md — File upload and validation with error display
+- [ ] 06-03-PLAN.md — Geocoding progress and wizard completion
 
 ---
 
 ### Phase 7: Reconfiguration
 
-**Goal:** L'utilisateur peut réinitialiser et changer de commune sans perdre de données accidentellement
+**Goal:** L'utilisateur peut reinitialiser et changer de commune sans perdre de donnees accidentellement
 
 **Dependencies:** Phase 5 (wizard must be reusable)
 
 **Requirements:**
 - RECONF-01: Bouton pour reconfigurer/changer commune
-- RECONF-02: Avertissement perte données
+- RECONF-02: Avertissement perte donnees
 - RECONF-03: Annulation possible
 
 **Success Criteria:**
@@ -90,7 +95,7 @@ Plans:
 
 ### Phase 8: Zone Export
 
-**Goal:** L'utilisateur peut exporter une fiche détaillée par zone avec rues OSM et colistiers assignés
+**Goal:** L'utilisateur peut exporter une fiche detaillee par zone avec rues OSM et colistiers assignes
 
 **Dependencies:** v1.0 (zones must exist), Phase 6 (team members must exist)
 
@@ -100,7 +105,7 @@ Plans:
 - EXP-03: PDF avec carte visuelle zone
 - EXP-04: PDF avec liste rues OSM
 - EXP-05: Export CSV par zone
-- EXP-06: Indicateur chargement pendant récup rues
+- EXP-06: Indicateur chargement pendant recup rues
 
 **Success Criteria:**
 1. User can export any zone as PDF from zone editor
@@ -123,7 +128,7 @@ Plans:
 | 3. Zone Creation | v1.0 | 3/3 | Complete | 2026-02-05 |
 | 4. Assignment System | v1.0 | 3/3 | Complete | 2026-02-05 |
 | 5. Wizard Foundation | v1.1 | 3/3 | Complete | 2026-02-05 |
-| 6. CSV Import in Wizard | v1.1 | 0/TBD | Pending | — |
+| 6. CSV Import in Wizard | v1.1 | 0/3 | Planned | — |
 | 7. Reconfiguration | v1.1 | 0/TBD | Pending | — |
 | 8. Zone Export | v1.1 | 0/TBD | Pending | — |
 
@@ -132,7 +137,7 @@ Plans:
 ## Archived Phases
 
 <details>
-<summary>✅ v1.0 MVP (Phases 1-4) — SHIPPED 2026-02-05</summary>
+<summary>v1.0 MVP (Phases 1-4) — SHIPPED 2026-02-05</summary>
 
 - [x] Phase 1: Foundation (1/1 plans) — completed 2026-02-05
 - [x] Phase 2: Team Management (3/3 plans) — completed 2026-02-05
@@ -147,10 +152,10 @@ See [v1.0 Archive](milestones/v1.0-ROADMAP.md) for full details.
 
 ## Next Steps
 
-To start Phase 6:
+To execute Phase 6:
 ```
-/gsd:plan-phase 6
+/gsd:execute-phase 6
 ```
 
 ---
-*Roadmap updated: 2026-02-05 after Phase 5 planning*
+*Roadmap updated: 2026-02-05 after Phase 6 planning*
