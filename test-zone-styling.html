@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zone Styling Test Plan - Vivons Chapet</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 20px;
+      line-height: 1.6;
+      background: #f9fafb;
+    }
+    h1 {
+      color: #1f2937;
+      border-bottom: 3px solid #3b82f6;
+      padding-bottom: 12px;
+    }
+    h2 {
+      color: #374151;
+      margin-top: 32px;
+      border-bottom: 1px solid #d1d5db;
+      padding-bottom: 8px;
+    }
+    .section {
+      background: white;
+      border-radius: 8px;
+      padding: 24px;
+      margin: 20px 0;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .color-reference {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin: 16px 0;
+    }
+    .color-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .color-box {
+      width: 40px;
+      height: 40px;
+      border-radius: 4px;
+      border: 2px solid #e5e7eb;
+    }
+    .test-case {
+      background: #f3f4f6;
+      border-left: 4px solid #3b82f6;
+      padding: 16px;
+      margin: 12px 0;
+      border-radius: 4px;
+    }
+    .test-case h3 {
+      margin-top: 0;
+      color: #1f2937;
+      font-size: 1.1em;
+    }
+    .expected {
+      background: #dbeafe;
+      padding: 8px 12px;
+      border-radius: 4px;
+      margin: 8px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 0.95em;
+    }
+    .steps {
+      margin: 12px 0;
+    }
+    .steps ol {
+      margin: 8px 0;
+      padding-left: 24px;
+    }
+    .steps li {
+      margin: 8px 0;
+    }
+    code {
+      background: #f3f4f6;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9em;
+    }
+    .console-test {
+      background: #1f2937;
+      color: #f9fafb;
+      padding: 16px;
+      border-radius: 6px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9em;
+      margin: 16px 0;
+      overflow-x: auto;
+    }
+    .prereq {
+      background: #fef3c7;
+      border-left: 4px solid #f59e0b;
+      padding: 16px;
+      border-radius: 4px;
+      margin: 16px 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>🗺️ Zone Styling Test Plan</h1>
+  <p><strong>Feature:</strong> Dynamic zone polygon coloring based on team member assignment</p>
+  <p><strong>Phase:</strong> 04-02 Assignment System</p>
+
+  <div class="section prereq">
+    <h3>📋 Prerequisites</h3>
+    <ul>
+      <li>Application running: <code>npm run dev</code></li>
+      <li>Team members imported (Phase 2 CSV import)</li>
+      <li>Browser DevTools console open for verification</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>🎨 Color Reference (markerStyles.js)</h2>
+    <p>Team members are assigned colors from this palette in order:</p>
+    <div class="color-reference">
+      <div class="color-item">
+        <div class="color-box" style="background-color: #c30b82;"></div>
+        <span><strong>Index 0:</strong> #c30b82 (magenta)</span>
+      </div>
+      <div class="color-item">
+        <div class="color-box" style="background-color: #2563eb;"></div>
+        <span><strong>Index 1:</strong> #2563eb (blue)</span>
+      </div>
+      <div class="color-item">
+        <div class="color-box" style="background-color: #16a34a;"></div>
+        <span><strong>Index 2:</strong> #16a34a (green)</span>
+      </div>
+      <div class="color-item">
+        <div class="color-box" style="background-color: #ea580c;"></div>
+        <span><strong>Index 3:</strong> #ea580c (orange)</span>
+      </div>
+      <div class="color-item">
+        <div class="color-box" style="background-color: #7c3aed;"></div>
+        <span><strong>Index 4:</strong> #7c3aed (purple)</span>
+      </div>
+      <div class="color-item">
+        <div class="color-box" style="background-color: #0891b2;"></div>
+        <span><strong>Index 5:</strong> #0891b2 (cyan)</span>
+      </div>
+      <div class="color-item">
+        <div class="color-box" style="background-color: #dc2626;"></div>
+        <span><strong>Index 6:</strong> #dc2626 (red)</span>
+      </div>
+      <div class="color-item">
+        <div class="color-box" style="background-color: #ca8a04;"></div>
+        <span><strong>Index 7:</strong> #ca8a04 (yellow)</span>
+      </div>
+    </div>
+    <p><em>Default unassigned zone: #ef4444 border, #fca5a5 fill</em></p>
+  </div>
+
+  <div class="section">
+    <h2>🧪 Test Cases</h2>
+
+    <div class="test-case">
+      <h3>Test A: New Zone (Unassigned)</h3>
+      <div class="steps">
+        <strong>Steps:</strong>
+        <ol>
+          <li>Click polygon tool in left toolbar</li>
+          <li>Draw a new zone polygon on the map</li>
+          <li>Enter a zone name when prompted</li>
+          <li>Observe the zone color</li>
+        </ol>
+      </div>
+      <div class="expected">
+        <strong>Expected:</strong> Zone displays with red border (#ef4444) and light red fill (#fca5a5, opacity 0.2)
+      </div>
+    </div>
+
+    <div class="test-case">
+      <h3>Test B: Assign First Team Member</h3>
+      <div class="steps">
+        <strong>Steps:</strong>
+        <ol>
+          <li>Click on the zone to open editor dialog</li>
+          <li>Select the <strong>first team member</strong> in the assignment dropdown</li>
+          <li>Click "Enregistrer" to save</li>
+          <li>Observe the zone color change</li>
+        </ol>
+      </div>
+      <div class="expected">
+        <strong>Expected:</strong> Zone immediately changes to magenta (#c30b82 border and fill, opacity 0.3)
+      </div>
+    </div>
+
+    <div class="test-case">
+      <h3>Test C: Remove Assignment</h3>
+      <div class="steps">
+        <strong>Steps:</strong>
+        <ol>
+          <li>Click on the magenta zone to open editor</li>
+          <li>Deselect all team members (clear selection)</li>
+          <li>Click "Enregistrer" to save</li>
+          <li>Observe the zone color change</li>
+        </ol>
+      </div>
+      <div class="expected">
+        <strong>Expected:</strong> Zone returns to red (#ef4444 border, #fca5a5 fill)
+      </div>
+    </div>
+
+    <div class="test-case">
+      <h3>Test D: Assign Second Team Member</h3>
+      <div class="steps">
+        <strong>Steps:</strong>
+        <ol>
+          <li>Click on the zone to open editor</li>
+          <li>Select the <strong>second team member</strong> in the list</li>
+          <li>Click "Enregistrer" to save</li>
+          <li>Observe the zone color</li>
+        </ol>
+      </div>
+      <div class="expected">
+        <strong>Expected:</strong> Zone changes to blue (#2563eb border and fill, opacity 0.3)
+      </div>
+    </div>
+
+    <div class="test-case">
+      <h3>Test E: Multiple Assignments (First Takes Priority)</h3>
+      <div class="steps">
+        <strong>Steps:</strong>
+        <ol>
+          <li>Click on the blue zone to open editor</li>
+          <li>Hold Ctrl/Cmd and select <strong>multiple team members</strong></li>
+          <li>Ensure the second member (blue) is selected first in the list</li>
+          <li>Click "Enregistrer" to save</li>
+          <li>Observe the zone color</li>
+        </ol>
+      </div>
+      <div class="expected">
+        <strong>Expected:</strong> Zone displays color of the FIRST assigned member in the list (should remain blue #2563eb)
+      </div>
+    </div>
+
+    <div class="test-case">
+      <h3>Test F: Persistence After Page Refresh</h3>
+      <div class="steps">
+        <strong>Steps:</strong>
+        <ol>
+          <li>Ensure you have zones with various assignments (from tests above)</li>
+          <li>Note the current colors of each zone</li>
+          <li>Refresh the page (F5 or Cmd+R)</li>
+          <li>Wait for the map to load</li>
+          <li>Compare zone colors to pre-refresh state</li>
+        </ol>
+      </div>
+      <div class="expected">
+        <strong>Expected:</strong> All zone colors persist correctly:
+        <ul>
+          <li>Assigned zones display correct team member colors</li>
+          <li>Unassigned zones remain red</li>
+          <li>Colors match exactly as before refresh</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>🔍 Console Verification</h2>
+    <p>Open browser DevTools console and run these commands to verify data consistency:</p>
+
+    <div class="console-test">
+// Check all zones and their assignments<br>
+const data = JSON.parse(localStorage.getItem('vivons_chapet_data'));<br>
+console.table(data.zones.map(z => ({<br>
+&nbsp;&nbsp;id: z.id,<br>
+&nbsp;&nbsp;name: z.name,<br>
+&nbsp;&nbsp;assigned: z.assignedMembers?.length || 0,<br>
+&nbsp;&nbsp;firstMember: z.assignedMembers?.[0] || 'none'<br>
+})));<br>
+<br>
+// Find zones with assignments<br>
+const assignedZones = data.zones.filter(z => z.assignedMembers?.length > 0);<br>
+console.log('Assigned zones:', assignedZones.length);<br>
+<br>
+// Check color mapping for first assigned zone<br>
+if (assignedZones.length > 0) {<br>
+&nbsp;&nbsp;const zone = assignedZones[0];<br>
+&nbsp;&nbsp;const memberIndex = data.teamMembers.findIndex(m => m.id === zone.assignedMembers[0]);<br>
+&nbsp;&nbsp;console.log(`Zone "${zone.name}" -> Member index ${memberIndex}`);<br>
+}
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>✅ Success Criteria</h2>
+    <ul>
+      <li><strong>Unassigned zones display in red</strong> (#ef4444 border, #fca5a5 fill)</li>
+      <li><strong>Assigned zones display in team member's color</strong> (from palette above)</li>
+      <li><strong>Color updates immediately</strong> when assignment is saved (no page refresh needed)</li>
+      <li><strong>Colors persist correctly</strong> after page refresh</li>
+      <li><strong>Multiple assignments use first member's color</strong> (order matters)</li>
+      <li><strong>Visual consistency</strong> with team member markers on map</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>🐛 Known Issues to Watch For</h2>
+    <ul>
+      <li><strong>Color doesn't update:</strong> Check browser console for errors</li>
+      <li><strong>Wrong color displayed:</strong> Verify team member order in console</li>
+      <li><strong>Color lost on refresh:</strong> Check localStorage data persistence</li>
+      <li><strong>Red zone won't change color:</strong> Ensure team members are imported</li>
+    </ul>
+  </div>
+
+</body>
+</html>
