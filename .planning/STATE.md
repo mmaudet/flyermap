@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2025-02-05)
 ## Current Position
 
 Phase: 3 of 4 (Zone Creation)
-Plan: Ready to plan
-Status: Phase 2 complete, ready for Phase 3
-Last activity: 2026-02-05 — Phase 2 verified and complete
+Plan: 1 of 3 complete
+Status: In progress - Plan 03-01 complete
+Last activity: 2026-02-05 — Completed 03-01-PLAN.md (Geoman Integration)
 
-Progress: [█████░░░░░] 50%
+Progress: [█████░░░░░] 55%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 4
+- Total plans completed: 5
 - Average duration: 2.3 min
-- Total execution time: 0.14 hours
+- Total execution time: 0.16 hours
 
 **By Phase:**
 
@@ -29,10 +29,11 @@ Progress: [█████░░░░░] 50%
 |-------|-------|-------|----------|
 | 01-foundation | 1/1 | 3.8 min | 3.8 min |
 | 02-team-management | 3/3 | 5.1 min | 1.7 min |
+| 03-zone-creation | 1/3 | 2.3 min | 2.3 min |
 
 **Recent Trend:**
-- Last 5 plans: 3.8m, 1.8m, 1.5m, 1.4m
-- Trend: Consistent fast execution (infrastructure, services, UI integration)
+- Last 5 plans: 1.8m, 1.5m, 1.4m, 2.3m
+- Trend: Consistent fast execution (infrastructure complete, zone features in progress)
 
 *Updated after each plan completion*
 
@@ -60,6 +61,10 @@ Recent decisions affecting current work:
 | Event-driven UI synchronization | 02-03 | Decoupled components, single source of truth | Map and panel stay in sync automatically |
 | Inline progress during geocoding | 02-03 | Users need feedback during slow operation | Shows "Géocodage en cours..." message |
 | Reset file input after import | 02-03 | Allow re-importing same file for testing | Better developer/user experience |
+| Storage key changed to vivons_chapet_data | 03-01 | State now includes both teamMembers and zones | More generic key for multi-entity storage |
+| Red color scheme for zones | 03-01 | Distinct from blue commune boundary | Zones visually distinguishable (#ef4444 border, #fca5a5 fill) |
+| Polygon-only drawing controls | 03-01 | Zones are polygons; other shapes would clutter UI | Clean, focused toolbar for zone management |
+| Disable self-intersecting polygons | 03-01 | Self-intersection causes GeoJSON validity issues | Users cannot create invalid geometries |
 
 ### Pending Todos
 
@@ -71,8 +76,8 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-05
-Stopped at: Phase 2 complete, ready for Phase 3 planning
+Last session: 2026-02-05 05:03 UTC
+Stopped at: Completed 03-01-PLAN.md (Geoman Integration and Zone State Infrastructure)
 Resume file: None
 
 ---
