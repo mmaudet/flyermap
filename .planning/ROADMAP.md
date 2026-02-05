@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: Foundation** - Interactive map with commune boundaries ✓
 - [x] **Phase 2: Team Management** - Geocoded team markers with persistence ✓
 - [x] **Phase 3: Zone Creation** - Polygon drawing and editing ✓
-- [ ] **Phase 4: Assignment System** - Connect team to zones with export
+- [x] **Phase 4: Assignment System** - Connect team to zones with export ✓
 
 ## Phase Details
 
@@ -77,10 +77,12 @@ Plans:
   4. User can record estimated mailbox count for each zone
   5. User can export all data (team, zones, assignments) to JSON file
   6. User can import previously saved JSON to restore complete state
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] TBD (planned during phase planning)
+- [x] 04-01-PLAN.md — Zone editor dialog with assignment, mailbox count, notes ✓
+- [x] 04-02-PLAN.md — Dynamic zone styling based on assignment ✓
+- [x] 04-03-PLAN.md — JSON export/import with validation ✓
 
 ## Progress
 
@@ -92,7 +94,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | 1. Foundation | 1/1 | Complete ✓ | 2026-02-05 |
 | 2. Team Management | 3/3 | Complete ✓ | 2026-02-05 |
 | 3. Zone Creation | 3/3 | Complete ✓ | 2026-02-05 |
-| 4. Assignment System | 0/TBD | Not started | - |
+| 4. Assignment System | 3/3 | Complete ✓ | 2026-02-05 |
 
 ---
 *Roadmap created: 2026-02-05*

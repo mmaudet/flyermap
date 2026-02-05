@@ -29,16 +29,16 @@ Requirements pour la version initiale. Chaque requirement est mappé aux phases 
 
 ### Assignation
 
-- [ ] **ASGN-01**: Assigner un ou plusieurs colistiers à chaque zone
-- [ ] **ASGN-02**: La zone prend visuellement la couleur du colistier assigné
-- [ ] **ASGN-03**: Afficher un panneau d'édition au clic sur une zone (nom, assignation, notes)
-- [ ] **ASGN-04**: Saisir une estimation du nombre de boîtes aux lettres par zone
+- [x] **ASGN-01**: Assigner un ou plusieurs colistiers à chaque zone ✓
+- [x] **ASGN-02**: La zone prend visuellement la couleur du colistier assigné ✓
+- [x] **ASGN-03**: Afficher un panneau d'édition au clic sur une zone (nom, assignation, notes) ✓
+- [x] **ASGN-04**: Saisir une estimation du nombre de boîtes aux lettres par zone ✓
 
 ### Persistance
 
 - [x] **DATA-01**: Sauvegarder automatiquement les données dans LocalStorage ✓
-- [ ] **DATA-02**: Exporter les données complètes en fichier JSON
-- [ ] **DATA-03**: Importer les données depuis un fichier JSON sauvegardé
+- [x] **DATA-02**: Exporter les données complètes en fichier JSON ✓
+- [x] **DATA-03**: Importer les données depuis un fichier JSON sauvegardé ✓
 
 ## v2 Requirements
 
@@ -97,12 +97,12 @@ Quelle phase couvre quel requirement. Mis à jour lors de la création du roadma
 | ZONE-02 | Phase 3 | Complete |
 | ZONE-03 | Phase 3 | Complete |
 | ZONE-04 | Phase 3 | Complete |
-| ASGN-01 | Phase 4 | Pending |
-| ASGN-02 | Phase 4 | Pending |
-| ASGN-03 | Phase 4 | Pending |
-| ASGN-04 | Phase 4 | Pending |
-| DATA-02 | Phase 4 | Pending |
-| DATA-03 | Phase 4 | Pending |
+| ASGN-01 | Phase 4 | Complete |
+| ASGN-02 | Phase 4 | Complete |
+| ASGN-03 | Phase 4 | Complete |
+| ASGN-04 | Phase 4 | Complete |
+| DATA-02 | Phase 4 | Complete |
+| DATA-03 | Phase 4 | Complete |
 
 **Coverage:**
 - v1 requirements: 18 total
@@ -111,4 +111,4 @@ Quelle phase couvre quel requirement. Mis à jour lors de la création du roadma
 
 ---
 *Requirements defined: 2025-02-05*
-*Last updated: 2026-02-05 after Phase 3 completion*
+*Last updated: 2026-02-05 after Phase 4 completion*
