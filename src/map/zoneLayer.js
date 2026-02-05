@@ -102,6 +102,13 @@ function loadZonesFromStore() {
 
         // Bind popup
         layer.bindPopup(`<strong>${zone.name}</strong>`);
+
+        // Bind edit event
+        layer.on('pm:update', () => {
+          store.updateZone(zone.id, {
+            geojson: layer.toGeoJSON()
+          });
+        });
       }
     });
   });
@@ -147,5 +154,20 @@ function setupEventHandlers() {
 
     // Store layer reference
     layersByZoneId.set(zoneId, layer);
+  });
+
+  // Handle zone editing
+  // Use pm:update instead of pm:edit to avoid duplicate saves during vertex drag
+  // pm:update fires once when editing completes, pm:edit fires continuously
+  map.on('pm:update', (e) => {
+    const layer = e.layer;
+    const zoneId = layer.options.zoneId;
+
+    if (zoneId) {
+      // Update zone geometry in store
+      store.updateZone(zoneId, {
+        geojson: layer.toGeoJSON()
+      });
+    }
   });
 }
