@@ -19,6 +19,41 @@
         <p class="empty-message">Aucun colistier importé</p>
       </div>
     </div>
+
+    <dialog id="zone-editor">
+      <form method="dialog">
+        <h3>Éditer la zone</h3>
+
+        <div class="form-field">
+          <label for="zone-name">Nom de la zone</label>
+          <input type="text" id="zone-name" name="name" required>
+        </div>
+
+        <div class="form-field">
+          <label for="assigned-members">Membres assignés</label>
+          <select id="assigned-members" name="assignedMembers" multiple size="6">
+            <!-- Populated dynamically from team members -->
+          </select>
+          <small>Ctrl/Cmd + clic pour sélectionner plusieurs membres</small>
+        </div>
+
+        <div class="form-field">
+          <label for="mailbox-count">Nombre de boîtes aux lettres</label>
+          <input type="number" id="mailbox-count" name="mailboxCount" min="0" placeholder="Estimation">
+        </div>
+
+        <div class="form-field">
+          <label for="zone-notes">Notes</label>
+          <textarea id="zone-notes" name="notes" rows="4" placeholder="Notes additionnelles..."></textarea>
+        </div>
+
+        <div class="button-row">
+          <button type="submit" value="cancel" class="btn-secondary">Annuler</button>
+          <button type="submit" value="save" class="btn-primary">Enregistrer</button>
+        </div>
+      </form>
+    </dialog>
+
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>
