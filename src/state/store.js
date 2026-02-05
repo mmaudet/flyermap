@@ -3,7 +3,7 @@
  */
 import storage from '../data/storage.js';
 
-const STORAGE_KEY = 'vivons_chapet_team';
+const STORAGE_KEY = 'vivons_chapet_data';
 const DEBOUNCE_MS = 500;
 
 /**
@@ -57,7 +57,8 @@ class Store {
   constructor() {
     this.pubsub = new PubSub();
     this.state = {
-      teamMembers: []
+      teamMembers: [],
+      zones: []
     };
     this.saveTimer = null;
     this._loadInitialState();
@@ -72,6 +73,10 @@ class Store {
     if (savedData && Array.isArray(savedData.teamMembers)) {
       this.state.teamMembers = savedData.teamMembers;
       this.pubsub.publish('teamMembersLoaded', this.state.teamMembers);
+    }
+    if (savedData && Array.isArray(savedData.zones)) {
+      this.state.zones = savedData.zones;
+      this.pubsub.publish('zonesLoaded', this.state.zones);
     }
   }
 
@@ -177,6 +182,73 @@ class Store {
     this._debouncedSave();
 
     return member;
+  }
+
+  /**
+   * Get all zones
+   * @returns {Array} Zones array
+   */
+  getZones() {
+    return [...this.state.zones]; // Return copy to prevent direct mutation
+  }
+
+  /**
+   * Add a new zone
+   * @param {Object} zone - Zone data (name, geojson)
+   * @returns {Object} Added zone with generated ID
+   */
+  addZone(zone) {
+    const newZone = {
+      ...zone,
+      id: this._generateId(),
+      createdAt: new Date().toISOString()
+    };
+
+    this.state.zones.push(newZone);
+    this.pubsub.publish('zoneAdded', newZone);
+    this._debouncedSave();
+
+    return newZone;
+  }
+
+  /**
+   * Update a zone by ID
+   * @param {string} id - Zone ID
+   * @param {Object} updates - Fields to update
+   * @returns {Object|null} Updated zone or null if not found
+   */
+  updateZone(id, updates) {
+    const zone = this.state.zones.find(z => z.id === id);
+    if (!zone) {
+      return null;
+    }
+
+    Object.assign(zone, updates, {
+      updatedAt: new Date().toISOString()
+    });
+
+    this.pubsub.publish('zoneUpdated', zone);
+    this._debouncedSave();
+
+    return zone;
+  }
+
+  /**
+   * Remove a zone by ID
+   * @param {string} id - Zone ID
+   * @returns {boolean} True if removed, false if not found
+   */
+  removeZone(id) {
+    const index = this.state.zones.findIndex(z => z.id === id);
+    if (index === -1) {
+      return false;
+    }
+
+    const removed = this.state.zones.splice(index, 1)[0];
+    this.pubsub.publish('zoneRemoved', removed);
+    this._debouncedSave();
+
+    return true;
   }
 }
 
