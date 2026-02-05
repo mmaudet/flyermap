@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>FlyerMap</title>
+    <link rel="stylesheet" href="/node_modules/@adrii_/wizard-js/dist/wizard.min.css">
   </head>
   <body>
     <div id="map"></div>
@@ -66,6 +67,35 @@
           <button type="submit" value="save" class="btn-primary">Enregistrer</button>
         </div>
       </form>
+    </dialog>
+
+    <dialog id="welcome-wizard" class="wizard-dialog">
+      <div class="wizard">
+        <!-- Step 1: Welcome -->
+        <div class="wz-step" data-step-name="welcome">
+          <h2>Bienvenue sur FlyerMap</h2>
+          <p>Configurez votre commune en quelques étapes pour commencer.</p>
+          <p><strong>Étapes :</strong></p>
+          <ol>
+            <li>Entrez votre code postal</li>
+            <li>Sélectionnez votre commune</li>
+            <li>Confirmez la zone de travail</li>
+          </ol>
+          <button class="wz-next-button btn-primary">Commencer</button>
+        </div>
+
+        <!-- Step 2: Postal code (placeholder for next plan) -->
+        <div class="wz-step" data-step-name="postal">
+          <h3>Code postal</h3>
+          <p>Cette étape sera implémentée dans le prochain plan.</p>
+        </div>
+
+        <!-- Step 3: Preview (placeholder for later plan) -->
+        <div class="wz-step" data-step-name="preview">
+          <h3>Aperçu</h3>
+          <p>Cette étape sera implémentée dans un plan ultérieur.</p>
+        </div>
+      </div>
     </dialog>
 
     <script type="module" src="/src/main.js"></script>

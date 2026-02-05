@@ -12,6 +12,7 @@
     "vite": "^5.0.8"
   },
   "dependencies": {
+    "@adrii_/wizard-js": "^2.0.3",
     "@geoman-io/leaflet-geoman-free": "^2.19.2",
     "leaflet": "1.9.4",
     "papaparse": "^5.5.3"
