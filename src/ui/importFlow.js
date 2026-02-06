@@ -2,8 +2,9 @@
  * CSV import orchestration - parse, validate, geocode, store
  */
 import { parseCSV, validateTeamMembers, normalizeTeamMember } from '../services/csvImport.js';
-import { geocodeBatch } from '../services/geocoding.js';
+import { geocodeAddress } from '../services/geocoding.js';
 import { store } from '../state/store.js';
+import { updateTeamList } from './sidePanel.js';
 
 /**
  * Handle CSV file import - full pipeline
@@ -11,6 +12,8 @@ import { store } from '../state/store.js';
  * @returns {Promise<Object>} Result {success, added?, failed?, errors?}
  */
 export async function handleFileImport(file) {
+  const statusEl = document.getElementById('team-list');
+
   try {
     // Step 1: Parse CSV
     const rawMembers = await parseCSV(file);
@@ -26,26 +29,31 @@ export async function handleFileImport(file) {
     // Step 3: Normalize
     const members = rawMembers.map(normalizeTeamMember);
 
-    // Step 4: Geocode
-    const addresses = members.map(m => ({
-      address: m.address,
-      postcode: m.postcode || '78130' // Default to Chapet
-    }));
+    // Step 4: If members already exist, ask to replace
+    const existingMembers = store.getTeamMembers();
+    if (existingMembers.length > 0) {
+      if (!confirm(`${existingMembers.length} colistier(s) existant(s). Remplacer par les ${members.length} du CSV ?`)) {
+        return { success: false };
+      }
+      // Clear existing members
+      for (const m of existingMembers) {
+        store.removeTeamMember(m.id);
+      }
+    }
 
-    // Show progress
-    const statusEl = document.getElementById('team-list');
-    const originalContent = statusEl.innerHTML;
-    statusEl.innerHTML = '<p class="empty-message">Géocodage en cours...</p>';
+    // Step 5: Geocode with progress
 
-    const geoResults = await geocodeBatch(addresses);
+    statusEl.innerHTML = `<p class="empty-message">Géocodage : 0/${members.length}...</p>`;
 
-    // Step 5: Merge results and add to store
     let successCount = 0;
     let failCount = 0;
 
-    members.forEach((member, i) => {
-      const geo = geoResults[i];
-      if (geo.success) {
+    for (let i = 0; i < members.length; i++) {
+      const member = members[i];
+      statusEl.innerHTML = `<p class="empty-message">Géocodage : ${i + 1}/${members.length} — ${member.name}...</p>`;
+
+      try {
+        const geo = await geocodeAddress(member.address);
         store.addTeamMember({
           name: member.name,
           address: member.address,
@@ -55,22 +63,32 @@ export async function handleFileImport(file) {
           geocodeScore: geo.score
         });
         successCount++;
-      } else {
-        console.warn(`Geocoding failed for ${member.name}: ${geo.error}`);
+      } catch (error) {
+        console.warn(`Geocoding failed for ${member.name}: ${error.message}`);
         failCount++;
       }
-    });
 
-    // Step 6: Report results
+      // Rate limiting
+      if (i < members.length - 1) {
+        await new Promise(resolve => setTimeout(resolve, 20));
+      }
+    }
+
+    // Step 6: Always restore team list
+    updateTeamList();
+
+    // Step 7: Report results
     if (failCount > 0) {
-      alert(`Import terminé: ${successCount} colistiers ajoutés, ${failCount} adresses non trouvées.`);
+      alert(`Import terminé : ${successCount} colistier(s) ajouté(s), ${failCount} adresse(s) non trouvée(s).`);
     }
 
     return { success: true, added: successCount, failed: failCount };
 
   } catch (error) {
     console.error('Import failed:', error);
-    alert(`Erreur d'import: ${error.message || 'Erreur inconnue'}`);
+    // Always restore team list on error
+    updateTeamList();
+    alert(`Erreur d'import : ${error.message || 'Erreur inconnue'}`);
     return { success: false, error };
   }
 }
