@@ -23,7 +23,7 @@ export function exportToJSON() {
 
   const a = document.createElement('a');
   a.href = url;
-  a.download = `vivons-chapet-${Date.now()}.json`;
+  a.download = `flyermap-export-${Date.now()}.json`;
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
