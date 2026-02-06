@@ -8,6 +8,7 @@ import '@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css';
 import { store, subscribe } from '../state/store.js';
 import { openZoneEditor } from '../ui/zoneEditor.js';
 import { getTeamMemberColor } from '../map/markerStyles.js';
+import { countBuildingsDetailed } from '../services/overpass.js';
 
 // Module-level variables
 let map = null;
@@ -246,6 +247,13 @@ function setupEventHandlers() {
     // Store layer reference
     layersByZoneId.set(zoneId, layer);
 
+    // Auto-estimate building count via OSM
+    countBuildingsDetailed(geojson).then(count => {
+      store.updateZone(zoneId, { mailboxCount: count });
+    }).catch(err => {
+      console.warn(`Auto-estimate failed for ${finalName}:`, err.message);
+    });
+
     // Bring zones to front after adding new zone
     zoneGroup.bringToFront();
   });
@@ -259,8 +267,16 @@ function setupEventHandlers() {
 
     if (zoneId) {
       // Update zone geometry in store
+      const updatedGeojson = layer.toGeoJSON();
       store.updateZone(zoneId, {
-        geojson: layer.toGeoJSON()
+        geojson: updatedGeojson
+      });
+
+      // Re-estimate building count for new geometry
+      countBuildingsDetailed(updatedGeojson).then(count => {
+        store.updateZone(zoneId, { mailboxCount: count });
+      }).catch(err => {
+        console.warn(`Auto-estimate failed after edit:`, err.message);
       });
     }
   });
