@@ -380,6 +380,16 @@ dialog#zone-editor h3 {
   color: #dc2626;
 }
 
+#estimate-status.estimating {
+  color: #d97706;
+  animation: blink 1.2s ease-in-out infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
 /* Panel footer with export/import controls */
 .panel-footer {
   padding: 12px;

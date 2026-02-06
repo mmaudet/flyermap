@@ -2,8 +2,8 @@
  * Zone editor dialog component
  * Handles team assignment, zone naming, and metadata editing
  */
-import { store } from '../state/store.js';
-import { updateZoneStyle, removeZone } from '../map/zoneLayer.js';
+import { store, subscribe } from '../state/store.js';
+import { updateZoneStyle, removeZone, isEstimating } from '../map/zoneLayer.js';
 import { countBuildingsDetailed, getStreetsInBbox } from '../services/overpass.js';
 import { getTeamMemberColor } from '../map/markerStyles.js';
 import { exportZonePDF, exportZoneCSV } from '../services/zoneExport.js';
@@ -11,6 +11,7 @@ import { exportZonePDF, exportZoneCSV } from '../services/zoneExport.js';
 let dialog = null;
 let currentZone = null;
 let mapInstance = null;
+let unsubZoneUpdated = null;
 
 /**
  * Initialize zone editor dialog
@@ -72,7 +73,9 @@ export function initZoneEditor(map) {
     // Reset form and clear status
     form.reset();
     document.getElementById('estimate-status').textContent = '';
+    document.getElementById('estimate-status').className = '';
     document.getElementById('export-status').textContent = '';
+    if (unsubZoneUpdated) { unsubZoneUpdated(); unsubZoneUpdated = null; }
     currentZone = null;
   });
 }
@@ -145,8 +148,26 @@ export function openZoneEditor(zone) {
   // Populate notes
   document.getElementById('zone-notes').value = zone.notes || '';
 
-  // Clear estimate status
-  document.getElementById('estimate-status').textContent = '';
+  // Show estimation status
+  const estimateStatus = document.getElementById('estimate-status');
+  if (isEstimating(zone.id)) {
+    estimateStatus.textContent = 'Estimation en cours...';
+    estimateStatus.className = 'estimating';
+  } else {
+    estimateStatus.textContent = '';
+    estimateStatus.className = '';
+  }
+
+  // Subscribe to zone updates to catch estimation completion
+  if (unsubZoneUpdated) unsubZoneUpdated();
+  unsubZoneUpdated = subscribe('zoneUpdated', (updatedZone) => {
+    if (currentZone && updatedZone.id === currentZone.id && updatedZone.mailboxCount != null) {
+      document.getElementById('mailbox-count').value = updatedZone.mailboxCount;
+      const status = document.getElementById('estimate-status');
+      status.textContent = `${updatedZone.mailboxCount} bâtiments trouvés via OSM`;
+      status.className = 'success';
+    }
+  });
 
   // Populate team member checkboxes
   const container = document.getElementById('members-checkboxes');

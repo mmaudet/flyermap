@@ -14,6 +14,16 @@ import { countBuildingsDetailed } from '../services/overpass.js';
 let map = null;
 let zoneGroup = null;
 const layersByZoneId = new Map();
+const estimatingZones = new Set();
+
+/**
+ * Check if a zone is currently being estimated
+ * @param {string} zoneId - Zone ID
+ * @returns {boolean}
+ */
+export function isEstimating(zoneId) {
+  return estimatingZones.has(zoneId);
+}
 
 // Zone style constants
 const ZONE_STYLE = {
@@ -248,10 +258,13 @@ function setupEventHandlers() {
     layersByZoneId.set(zoneId, layer);
 
     // Auto-estimate building count via OSM
+    estimatingZones.add(zoneId);
     countBuildingsDetailed(geojson).then(count => {
       store.updateZone(zoneId, { mailboxCount: count });
     }).catch(err => {
       console.warn(`Auto-estimate failed for ${finalName}:`, err.message);
+    }).finally(() => {
+      estimatingZones.delete(zoneId);
     });
 
     // Bring zones to front after adding new zone
@@ -273,10 +286,13 @@ function setupEventHandlers() {
       });
 
       // Re-estimate building count for new geometry
+      estimatingZones.add(zoneId);
       countBuildingsDetailed(updatedGeojson).then(count => {
         store.updateZone(zoneId, { mailboxCount: count });
       }).catch(err => {
         console.warn(`Auto-estimate failed after edit:`, err.message);
+      }).finally(() => {
+        estimatingZones.delete(zoneId);
       });
     }
   });
