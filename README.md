@@ -23,7 +23,7 @@ FlyerMap permet aux coordinateurs de campagne de visualiser et organiser la dist
 
 ### Zones de distribution
 - Création de zones personnalisées par dessin sur la carte
-- Estimation du nombre de boîtes aux lettres via OpenStreetMap
+- Estimation automatique du nombre de boîtes aux lettres via OpenStreetMap (à la création et modification)
 - Attribution des colistiers aux zones
 - Notes et métadonnées par zone
 
@@ -31,6 +31,7 @@ FlyerMap permet aux coordinateurs de campagne de visualiser et organiser la dist
 
 ### Export
 - **Export PDF par zone** : nom, colistiers assignés, carte, liste des rues OSM
+- **Export CSV par zone** : données structurées avec rues OSM
 - **Export PDF global** : toutes les zones en un seul document
 - **Export/Import JSON** : sauvegarde complète des données
 
@@ -78,7 +79,7 @@ npm run build
 ### À quelles questions FlyerMap répond-il ?
 
 - **Qui distribue où ?** — Visualisez les zones assignées à chaque colistier
-- **Combien de boîtes aux lettres dans ma zone ?** — Estimation automatique via OSM
+- **Combien de boîtes aux lettres dans ma zone ?** — Estimation automatique via OSM dès la création de la zone
 - **Quelles rues couvrir ?** — Liste des rues par zone depuis OpenStreetMap
 - **Comment partager les affectations ?** — Export PDF imprimable par zone
 
